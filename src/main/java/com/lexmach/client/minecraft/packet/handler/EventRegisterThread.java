@@ -58,9 +58,9 @@ public class EventRegisterThread extends Thread {
         while (target.isAlive()) {
             try {
                 if (in.available() == 0) {
-                    Thread.yield();
+                    sleep(50);
                     continue;
-                };
+                }
                 Packet received = PacketUtil.readPacket(in, target.getState());
                 target.setState(received.changeState(target.getState()));
                 invokeReceivedPacketEvent(received);

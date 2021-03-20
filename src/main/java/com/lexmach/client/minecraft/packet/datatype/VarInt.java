@@ -43,7 +43,7 @@ public class VarInt implements MinecraftData  {
 
             numRead++;
             if (numRead > 5) {
-                throw  new RuntimeException("VarInt is too big");
+                throw new RuntimeException("VarInt is too big");
             }
         } while ((read & 0b10000000) != 0);
         this.num = result;

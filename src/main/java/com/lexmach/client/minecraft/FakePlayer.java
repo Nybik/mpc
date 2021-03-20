@@ -10,6 +10,7 @@ import com.lexmach.client.minecraft.packet.datatype.VarString;
 import com.lexmach.client.minecraft.packet.handler.EventRegisterThread;
 import com.lexmach.client.minecraft.packet.handler.PacketEventListener;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -56,9 +57,11 @@ public class FakePlayer {
         log.info("Fake Player \"%s\" is joining server %s:%d".formatted(name, ip, port));
 
         connection = new Socket(ip, port);
+        connection.setTcpNoDelay(true);
         state = PlayerState.HANDSHAKING;
         eventThread.setPlayer(this);
-        eventThread.setInputStream(connection.getInputStream());
+        eventThread.setInputStream(new BufferedInputStream(connection.getInputStream()));
+        eventThread.setName("EventRegisterThread of %s".formatted(this.name));
         eventThread.start();
         this.sendPacket(new HandshakePacket(new VarInt(754), new VarString(ip), (short) port, new VarInt(2)));
         this.sendPacket(new LoginStartPacket(new VarString(this.getName())));

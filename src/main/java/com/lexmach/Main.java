@@ -16,6 +16,7 @@ import com.lexmach.client.minecraft.packet.server.PlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.server.ServerKeepAlivePacket;
 import com.lexmach.client.minecraft.packet.server.SpawnLivingEntityPacket;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class Main extends PacketEventListener {
@@ -23,12 +24,23 @@ public class Main extends PacketEventListener {
     private static Logger log = Logger.getLogger(BasicClientMain.class.getName());
 
     private static VarInt protocolVersion = new VarInt(754);
-    public static FakePlayer player;
+
+    public static Random rnd = new Random();
+
+    public static String randString() {
+        String answer = "";
+        for (int i = 0; i < 5; ++i) {
+            answer += (char)(rnd.nextInt(26) + 'a');
+        }
+        return answer;
+    }
 
     public static void main(String[] args) throws Exception {
-        player = new FakePlayer("checker", "localhost", 25565);
-        player.addListener(new Main());
-        player.connect();
+        for (int i = 0; i < 200; ++i) {
+            FakePlayer player = new FakePlayer("checker" + randString(), "localhost", 25565);
+            player.addListener(new Main());
+            player.connect();
+        }
 //        byte one = 1;
 //        Boolean b = (boolean)one;
 //
@@ -48,13 +60,14 @@ public class Main extends PacketEventListener {
 
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
+        FakePlayer player = event.getPlayer();
 //        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
         if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
             try {
                 player.sendPacket(new TeleportConfirmPacket(p.teleportId));
                 System.out.println("new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true).getData().length = " + new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true).getData().length);
-                player.sendPacket(new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true));
+                player.sendPacket(new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, false));
                 x = p.X;
                 y = p.Y;
                 z = p.Z;
@@ -69,8 +82,8 @@ public class Main extends PacketEventListener {
             ServerKeepAlivePacket p = (ServerKeepAlivePacket) event.getReceived();
             try {
                 player.sendPacket(new ClientKeepAlivePacket(p.keepAliveId));
-                player.sendPacket(new ClientPlayerPositionAndLookPacket(x + 1, y, z, yaw, pitch, true));
-                x++;
+//                player.sendPacket(new ClientPlayerPositionAndLookPacket(x + 1, y, z, yaw, pitch, false));
+//                x++;
             } catch (Exception e) {
                 e.printStackTrace();
             }

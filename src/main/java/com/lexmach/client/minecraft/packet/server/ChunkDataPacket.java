@@ -12,12 +12,12 @@ import java.io.InputStream;
 public class ChunkDataPacket extends Packet {
     Integer chunkX = 0;
     Integer chunkZ = 0;
-    Boolean fullChunk = true;
+    Boolean fullChunk;
     VarInt primaryBit = new VarInt();
     VarTag heightMaps = new VarTag();
-    VarInt[] biomes = new VarInt[0];
-    byte[] data = new byte[0];
-    VarTag[] blockEntities = new VarTag[0];
+    VarInt[] biomes;
+    byte[] data;
+    VarTag[] blockEntities;
 
 
     public void specialRead(InputStream in, VarInt packageSize) throws Exception {

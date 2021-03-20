@@ -12,6 +12,7 @@ import com.lexmach.client.minecraft.packet.server.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -30,10 +31,7 @@ public class PacketUtil {
     }
 
     public static void readFully(InputStream in, byte[] arr) throws IOException {
-        int read = 0;
-        while (read != arr.length) {
-            read += in.read(arr, read, arr.length - read);
-        }
+        in.readNBytes(arr, 0, arr.length);
     }
 
     public static void writeToFields(Class packet, Object... fields) throws IllegalAccessException {
@@ -75,21 +73,18 @@ public class PacketUtil {
                 Array.set(arr, i, element);
             }
             return arr;
-        }
-        else if (MinecraftCustom.class.isAssignableFrom(clazz)) {
+        } else if (MinecraftCustom.class.isAssignableFrom(clazz)) {
             T obj = clazz.getDeclaredConstructor().newInstance();
             for (Field field : clazz.getFields()) {
                 Object newField = PacketUtil.getObjectFromStream(field.getType(), in);
                 field.set(obj, newField);
             }
             return obj;
-        }
-        else if (MinecraftData.class.isAssignableFrom(clazz)) {
+        } else if (MinecraftData.class.isAssignableFrom(clazz)) {
             T obj = clazz.getDeclaredConstructor().newInstance();
-            ((MinecraftData)obj).fromStream(in);
+            ((MinecraftData) obj).fromStream(in);
             return obj;
-        }
-        else if (Boolean.class.isAssignableFrom(clazz) || boolean.class.isAssignableFrom(clazz)) {
+        } else if (Boolean.class.isAssignableFrom(clazz) || boolean.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[1];
             PacketUtil.readFully(in, tmp);
             return (T) Boolean.valueOf(tmp[0] == 0x01);
@@ -126,30 +121,28 @@ public class PacketUtil {
 
     public static Packet readPacket(InputStream in, PlayerState state) throws Exception {
         VarInt packetSize = new VarInt();
-        VarInt packetId = new VarInt();
-        packetSize = PacketUtil.getObjectFromStream(VarInt.class, in);
-        packetId = PacketUtil.getObjectFromStream(VarInt.class, in);
+        packetSize.fromStream(in);
+        byte[] data = new byte[packetSize.num];
+        PacketUtil.readFully(in, data);
+
+        InputStream dataInput = new ByteArrayInputStream(data);
+        VarInt packetId = PacketUtil.getObjectFromStream(VarInt.class, dataInput);
 
         Packet received = PacketUtil.getPacketByPacketState(new PacketState(state, packetId.num, false));
         if (received == null) {
-            byte[] info = new byte[packetSize.num - packetId.toBytes().length];
-            int readed = 0;
-            while (readed != info.length) {
-                readed += in.read(info, readed, info.length - readed);
-            }
             throw new UnknownPackageException("Package of signature %s is unknown".formatted(new PacketState(state, packetId.num, false)));
         }
         Method read = hasSpecialRead(received);
 
         if (read != null) {
 //            System.out.println(received.getClass().getName());
-            read.invoke(received, in, packetSize);
+            read.invoke(received, dataInput, packetSize);
             return received;
         }
         for (Field field : received.getClass().getFields()) {
             Object obj = emptyObject(field.getType());
 
-            obj = PacketUtil.getObjectFromStream(obj.getClass(), in);
+            obj = PacketUtil.getObjectFromStream(obj.getClass(), dataInput);
             field.set(received, obj);
         }
         return received;
