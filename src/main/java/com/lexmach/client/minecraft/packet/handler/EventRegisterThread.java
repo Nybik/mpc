@@ -4,6 +4,7 @@ import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.FakePlayer;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
+import com.lexmach.client.minecraft.packet.exceptions.UnknownPackageException;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
 import com.lexmach.client.minecraft.packet.server.ResponsePacket;
@@ -64,6 +65,10 @@ public class EventRegisterThread extends Thread {
                 target.setState(received.changeState(target.getState()));
                 invokeReceivedPacketEvent(received);
             } catch (Exception ex) {
+                if (ex instanceof UnknownPackageException) {
+//                    System.out.println("ex.getMessage() = " + ex.getMessage());
+                    continue;
+                }
                 ex.printStackTrace();
                 this.stop();
             }

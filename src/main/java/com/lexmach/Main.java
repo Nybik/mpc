@@ -3,6 +3,8 @@ package com.lexmach;
 import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.FakePlayer;
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.client.ClientKeepAlivePacket;
+import com.lexmach.client.minecraft.packet.client.ClientPlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.client.PingPacket;
 import com.lexmach.client.minecraft.packet.client.TeleportConfirmPacket;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
@@ -11,6 +13,8 @@ import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
 import com.lexmach.client.minecraft.packet.server.LoginSuccessPacket;
 import com.lexmach.client.minecraft.packet.server.PlayerPositionAndLookPacket;
+import com.lexmach.client.minecraft.packet.server.ServerKeepAlivePacket;
+import com.lexmach.client.minecraft.packet.server.SpawnLivingEntityPacket;
 
 import java.util.logging.Logger;
 
@@ -22,7 +26,7 @@ public class Main extends PacketEventListener {
     public static FakePlayer player;
 
     public static void main(String[] args) throws Exception {
-        player = new FakePlayer("faker", "localhost", 25565);
+        player = new FakePlayer("checker", "localhost", 25565);
         player.addListener(new Main());
         player.connect();
 //        byte one = 1;
@@ -38,21 +42,47 @@ public class Main extends PacketEventListener {
         log.info("Packet id %d is sent from player \"%s\"\nContent: %s".formatted(event.getSent().getId(), event.getPlayer().getName(), event.getSent()));
     }
 
+    public static double x, y, z;
+    public static float yaw, pitch;
+
+
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
-        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
-//        if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
-//            PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
-//            try {
-//                player.sendPacket(new TeleportConfirmPacket(p.teleportId));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-        if (event.getReceived() instanceof LoginSuccessPacket) {
-            LoginSuccessPacket p = (LoginSuccessPacket) event.getReceived();
-            System.out.println("p.username = " + p.username);
+//        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
+        if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
+            PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
+            try {
+                player.sendPacket(new TeleportConfirmPacket(p.teleportId));
+                System.out.println("new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true).getData().length = " + new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true).getData().length);
+                player.sendPacket(new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true));
+                x = p.X;
+                y = p.Y;
+                z = p.Z;
+                yaw = p.yaw;
+                pitch = p.pitch;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        if (event.getReceived() instanceof ServerKeepAlivePacket) {
+            ServerKeepAlivePacket p = (ServerKeepAlivePacket) event.getReceived();
+            try {
+                player.sendPacket(new ClientKeepAlivePacket(p.keepAliveId));
+                player.sendPacket(new ClientPlayerPositionAndLookPacket(x + 1, y, z, yaw, pitch, true));
+                x++;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        if (event.getReceived() instanceof LoginSuccessPacket) {
+//            LoginSuccessPacket p = (LoginSuccessPacket) event.getReceived();
+//            System.out.println("p.username = " + p.username);
+//        }
+//        if (event.getReceived() instanceof SpawnLivingEntityPacket) {
+//            SpawnLivingEntityPacket p = (SpawnLivingEntityPacket) event.getReceived();
+//            System.out.printf("Content: %s%n", p.toString());
+//        }
     }
 }
 

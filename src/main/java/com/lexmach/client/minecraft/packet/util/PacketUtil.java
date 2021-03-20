@@ -62,6 +62,8 @@ public class PacketUtil {
         if (obj instanceof Short) return Shorts.toByteArray((Short) obj);
         if (obj instanceof Integer) return Ints.toByteArray((Integer) obj);
         if (obj instanceof Long) return Longs.toByteArray((Long) obj);
+        if (obj instanceof Double) return getBytesFromObject(Double.doubleToLongBits((Double) obj));
+        if (obj instanceof Float) return getBytesFromObject(Float.floatToIntBits((Float) obj));
         throw new NotImplementedException(obj.getClass().toString());
     }
     public static <T> T getObjectFromStream(Class<T> clazz, InputStream in) throws Exception {
@@ -99,6 +101,10 @@ public class PacketUtil {
             byte[] tmp = new byte[Ints.BYTES];
             PacketUtil.readFully(in, tmp);
             return (T) Integer.valueOf(Ints.fromByteArray(tmp));
+        } else if (Short.class.isAssignableFrom(clazz)) {
+            byte[] tmp = new byte[Short.BYTES];
+            PacketUtil.readFully(in, tmp);
+            return (T) Short.valueOf(Shorts.fromByteArray(tmp));
         } else if (Long.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[Long.BYTES];
             PacketUtil.readFully(in, tmp);
@@ -136,7 +142,7 @@ public class PacketUtil {
         Method read = hasSpecialRead(received);
 
         if (read != null) {
-            System.out.println(received.getClass().getName());
+//            System.out.println(received.getClass().getName());
             read.invoke(received, in, packetSize);
             return received;
         }
@@ -191,6 +197,8 @@ public class PacketUtil {
             registerPacket(new DeclareCommandsPacket());
             registerPacket(new DeclareRecipesPacket());
             registerPacket(new EncryptionRequestPacket());
+            registerPacket(new EntityMetadataPacket());
+            registerPacket(new EntityPropertiesPacket());
             registerPacket(new EntityStatusPacket());
             registerPacket(new HeldItemChangeEvent());
             registerPacket(new JoinGamePacket());
@@ -199,7 +207,9 @@ public class PacketUtil {
             registerPacket(new PluginMessagePacket());
             registerPacket(new ResponsePacket());
             registerPacket(new ServerDifficultyPacket());
+            registerPacket(new ServerKeepAlivePacket());
             registerPacket(new SetCompressionPacket());
+            registerPacket(new SpawnLivingEntityPacket());
             registerPacket(new TagsPacket());
             registerPacket(new UnlockRecipesPacket());
             registerPacket(new PlayerPositionAndLookPacket());

@@ -26,20 +26,20 @@ public class ChunkDataPacket extends Packet {
         fullChunk = PacketUtil.getObjectFromStream(Boolean.class, in);
         primaryBit.fromStream(in);
         heightMaps.fromStream(in);
-        System.out.println("packageSize = " + packageSize);
+//        System.out.println("packageSize = " + packageSize);
         if (fullChunk) {
             biomes = PacketUtil.getObjectFromStream(VarInt[].class, in);
         }
         data = PacketUtil.getObjectFromStream(byte[].class, in);
         blockEntities = PacketUtil.getObjectFromStream(VarTag[].class, in);
-        System.out.println(PacketUtil.getBytesFromObject(chunkX).length);
-        System.out.println(PacketUtil.getBytesFromObject(chunkZ).length);
-        System.out.println(PacketUtil.getBytesFromObject(fullChunk).length);
-        System.out.println(PacketUtil.getBytesFromObject(primaryBit).length);
-        System.out.println(PacketUtil.getBytesFromObject(heightMaps).length);
-        System.out.println(PacketUtil.getBytesFromObject(data).length);
-        System.out.println(PacketUtil.getBytesFromObject(biomes).length);
-        System.out.println(PacketUtil.getBytesFromObject(blockEntities).length);
+//        System.out.println(PacketUtil.getBytesFromObject(chunkX).length);
+//        System.out.println(PacketUtil.getBytesFromObject(chunkZ).length);
+//        System.out.println(PacketUtil.getBytesFromObject(fullChunk).length);
+//        System.out.println(PacketUtil.getBytesFromObject(primaryBit).length);
+//        System.out.println(PacketUtil.getBytesFromObject(heightMaps).length);
+//        System.out.println(PacketUtil.getBytesFromObject(data).length);
+//        System.out.println(PacketUtil.getBytesFromObject(biomes).length);
+//        System.out.println(PacketUtil.getBytesFromObject(blockEntities).length);
 
 //        VarInt length = new VarInt();
 //        length.fromStream(in);
