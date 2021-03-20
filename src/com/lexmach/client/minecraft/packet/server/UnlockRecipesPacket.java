@@ -10,13 +10,13 @@ import java.io.InputStream;
 
 public class UnlockRecipesPacket extends Packet {
     VarInt action;
-    boolean craftingRecipeBookOpen;
-    boolean craftingRecipeBookFilter;
-    boolean smeltingRecipeBookFilterActive;
-    boolean blastFurnaceBookOpen;
-    boolean blastFurnaceBookFilterActive;
-    boolean smokerBookOpen;
-    boolean smokerBookFilterActive;
+    Boolean craftingRecipeBookOpen;
+    Boolean craftingRecipeBookFilter;
+    Boolean smeltingRecipeBookFilterActive;
+    Boolean blastFurnaceBookOpen;
+    Boolean blastFurnaceBookFilterActive;
+    Boolean smokerBookOpen;
+    Boolean smokerBookFilterActive;
     VarIdentifier[] recipeIds;
     VarIdentifier[] recipeId2s;
     //TODO

@@ -1,16 +1,16 @@
 package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.datatype.VarInt;
 
-public class PlayerAbilitiesPacket extends Packet {
+public class UpdateViewPositionPacket extends Packet {
 
-    public Byte flags;
-    public Float flyingSpeed;
-    public Float FOVmodifier;
+    public VarInt chunkX;
+    public VarInt chunkZ;
 
     @Override
     public int getId() {
-        return 0x30;
+        return 0x40;
     }
 
     @Override

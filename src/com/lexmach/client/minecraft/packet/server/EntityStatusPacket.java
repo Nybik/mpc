@@ -4,8 +4,8 @@ import com.lexmach.client.minecraft.packet.Packet;
 
 public class EntityStatusPacket extends Packet {
 
-    public int entityId;
-    public byte entityStatus;
+    public Integer entityId;
+    public Byte entityStatus;
 
     @Override
     public int getId() {

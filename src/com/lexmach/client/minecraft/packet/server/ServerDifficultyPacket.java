@@ -4,8 +4,8 @@ import com.lexmach.client.minecraft.packet.Packet;
 
 public class ServerDifficultyPacket extends Packet {
 
-    public byte difficulty;
-    public boolean isLocked;
+    public Byte difficulty;
+    public Boolean isLocked;
 
     @Override
     public int getId() {

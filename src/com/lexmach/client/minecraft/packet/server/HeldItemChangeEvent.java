@@ -4,7 +4,7 @@ import com.lexmach.client.minecraft.packet.Packet;
 
 public class HeldItemChangeEvent extends Packet {
 
-    public byte slot;
+    public Byte slot;
 
     @Override
     public int getId() {

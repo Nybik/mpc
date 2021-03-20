@@ -2,6 +2,9 @@ package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.*;
+import com.lexmach.client.minecraft.packet.util.PacketUtil;
+
+import java.io.InputStream;
 
 public class TagsPacket extends Packet {
 
@@ -9,6 +12,14 @@ public class TagsPacket extends Packet {
     public Tag[] itemTags;
     public Tag[] fluidTags;
     public Tag[] entityTags;
+
+//    public byte[] data;
+//
+//    public void specialRead(InputStream in, VarInt packageSize) throws Exception {
+//        int dataSize = packageSize.num - new VarInt(getId()).toBytes().length;
+//        data = new byte[dataSize];
+//        PacketUtil.readFully(in, data);
+//    }
 
     @Override
     public int getId() {
@@ -21,8 +32,8 @@ public class TagsPacket extends Packet {
     }
 
     public static class Tag implements MinecraftCustom {
-        VarIdentifier tagName;
-        VarInt[] entries;
+        public VarIdentifier tagName;
+        public VarInt[] entries;
     }
 }
 

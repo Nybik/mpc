@@ -10,12 +10,12 @@ import java.io.InputStream;
 
 public class PlayerPositionAndLookPacket extends Packet {
 
-    public double X;
-    public double Y;
-    public double Z;
-    public float yaw;
-    public float pitch;
-    public byte flags;
+    public Double X;
+    public Double Y;
+    public Double Z;
+    public Float yaw;
+    public Float pitch;
+    public Byte flags;
     public VarInt teleportId;
 
     @Override

@@ -13,6 +13,7 @@ public class VarIdentifier implements MinecraftData {
 
     @Override
     public void fromStream(InputStream in) throws IOException {
+        identifier = new VarString();
         identifier.fromStream(in);
     }
 }

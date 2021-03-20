@@ -1,9 +1,6 @@
 package com.lexmach.client.minecraft.packet.util;
 
-import com.google.common.primitives.Bytes;
-import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
-import com.google.common.primitives.Shorts;
+import com.google.common.primitives.*;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.client.*;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
@@ -42,7 +39,6 @@ public class PacketUtil {
         while (read != arr.length) {
             read += in.read(arr, read, arr.length - read);
         }
-        return;
     }
 
     public static void writeToFields(Class packet, Object... fields) throws IllegalAccessException {
@@ -53,7 +49,7 @@ public class PacketUtil {
         }
     }
 
-    public static final byte[] getBytesFromObject(Object obj) {
+    public static byte[] getBytesFromObject(Object obj) {
         if (obj instanceof MinecraftData) return ((MinecraftData) obj).toBytes();
         if (obj instanceof Boolean) {
             if ((Boolean) obj) return new byte[]{0x01};
@@ -69,14 +65,19 @@ public class PacketUtil {
         if (obj.getClass().isArray()) {
             VarInt length = new VarInt();
             PacketUtil.setObjectFromStream(length, in);
-            obj = Array.newInstance(obj.getClass().arrayType(), length.num);
+            System.out.println("length = " + length);
+            obj = Array.newInstance(obj.getClass().getComponentType(), length.num);
+            System.out.println("Array.getLength(obj) = " + Array.getLength(obj));
             for (int i = 0; i < length.num; ++i) {
+                if (Array.get(obj, i) == null) {
+                    Array.set(obj, i, emptyObject(obj.getClass().getComponentType()));
+                }
                 PacketUtil.setObjectFromStream(Array.get(obj, i), in);
             }
         }
         else if (obj instanceof MinecraftCustom) {
             for (Field field : obj.getClass().getFields()) {
-                Object newField = field.getType().getDeclaredConstructor().newInstance();
+                Object newField = emptyObject(field.getType());
 
                 PacketUtil.setObjectFromStream(newField, in);
                 field.set(obj, newField);
@@ -87,20 +88,28 @@ public class PacketUtil {
         }
         else if (obj instanceof Boolean) {
             byte[] tmp = new byte[1];
-            in.read(tmp);
+            PacketUtil.readFully(in, tmp);
             obj = tmp[0];
         } else if (obj instanceof Byte) {
             byte[] tmp = new byte[1];
-            in.read(tmp);
+            PacketUtil.readFully(in, tmp);
             obj = tmp[0];
         } else if (obj instanceof Integer) {
             byte[] tmp = new byte[Ints.BYTES];
-            in.read(tmp);
+            PacketUtil.readFully(in, tmp);
             obj = Ints.fromByteArray(tmp);
         } else if (obj instanceof Long) {
             byte[] tmp = new byte[Long.BYTES];
-            in.read(tmp);
+            PacketUtil.readFully(in, tmp);
             obj = Longs.fromByteArray(tmp);
+        } else if (obj instanceof Float) {
+            byte[] tmp = new byte[Float.BYTES];
+            PacketUtil.readFully(in, tmp);
+            obj = Float.intBitsToFloat(Ints.fromByteArray(tmp));
+        } else if (obj instanceof Double) {
+            byte[] tmp = new byte[Double.BYTES];
+            PacketUtil.readFully(in, tmp);
+            obj = Double.longBitsToDouble(Longs.fromByteArray(tmp));
         } else {
             throw new NotImplementedException(obj.getClass().toString());
         }
@@ -126,11 +135,12 @@ public class PacketUtil {
         Method read = hasSpecialRead(received);
 
         if (read != null) {
-            read.invoke(received, packetSize);
+            System.out.println(received.getClass().getName());
+            read.invoke(received, in, packetSize);
             return received;
         }
         for (Field field : received.getClass().getFields()) {
-            Object obj = field.getType().getDeclaredConstructor().newInstance();
+            Object obj = emptyObject(field.getType());
 
             PacketUtil.setObjectFromStream(obj, in);
             field.set(received, obj);
@@ -138,9 +148,23 @@ public class PacketUtil {
         return received;
     }
 
+    public static Object emptyObject(Class type) throws Exception {
+        if (type == null) {
+            return null;
+        }
+        if (type.isArray()) {
+            return Array.newInstance(type.getComponentType(), 0);
+        }
+        try {
+            return type.getDeclaredConstructor().newInstance();
+        } catch (Exception ex) {
+            return type.getMethod("valueOf", String.class).invoke(null, "0");
+        }
+    }
+
     public static Method hasSpecialRead(Packet packet) {
         try {
-            return packet.getClass().getMethod("specialRead");
+            return packet.getClass().getMethod("specialRead", InputStream.class, VarInt.class);
         } catch (NoSuchMethodException e) {
             return null;
         }
@@ -165,6 +189,7 @@ public class PacketUtil {
 
 
             //Server packets
+            registerPacket(new ChunkDataPacket());
             registerPacket(new DeclareCommandsPacket());
             registerPacket(new DeclareRecipesPacket());
             registerPacket(new EncryptionRequestPacket());
@@ -179,6 +204,10 @@ public class PacketUtil {
             registerPacket(new SetCompressionPacket());
             registerPacket(new TagsPacket());
             registerPacket(new UnlockRecipesPacket());
+            registerPacket(new PlayerPositionAndLookPacket());
+            registerPacket(new PlayerInfoPacket());
+            registerPacket(new UpdateViewPositionPacket());
+            registerPacket(new UpdateLightPacket());
         } catch (Exception e) {
             e.printStackTrace();
         }

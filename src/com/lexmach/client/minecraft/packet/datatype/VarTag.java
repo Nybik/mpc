@@ -17,7 +17,7 @@ public class VarTag implements MinecraftData {
 
     @Override
     public void fromStream(InputStream in) throws IOException {
-        var NBT = new NBTInputStream(in);
+        var NBT = new NBTInputStream(in, false);
         NBTTag = NBT.readTag();
     }
 }
