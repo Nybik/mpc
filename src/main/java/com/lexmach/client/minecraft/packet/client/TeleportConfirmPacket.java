@@ -1,6 +1,7 @@
 package com.lexmach.client.minecraft.packet.client;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 
 public class TeleportConfirmPacket extends Packet {
@@ -8,6 +9,11 @@ public class TeleportConfirmPacket extends Packet {
 
     public TeleportConfirmPacket(VarInt id) {
         this.id = id;
+    }
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
     }
 
     @Override

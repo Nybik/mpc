@@ -1,11 +1,9 @@
 package com.lexmach.client.minecraft;
 
 import com.lexmach.client.basic.BasicClientMain;
-import com.lexmach.client.basic.BasicClientServerReader;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.client.HandshakePacket;
 import com.lexmach.client.minecraft.packet.client.LoginStartPacket;
-import com.lexmach.client.minecraft.packet.client.PingPacket;
-import com.lexmach.client.minecraft.packet.client.RequestPacket;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
@@ -21,19 +19,12 @@ public class FakePlayer {
     private static Logger log = Logger.getLogger(BasicClientMain.class.getName());
 
     private Socket connection;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private PlayerState state;
 
     private String name;
+
     private String ip;
     private int port;
-
     private EventRegisterThread eventThread = new EventRegisterThread();
 
     public void sendPacket(Packet packet) throws Exception {
@@ -50,6 +41,7 @@ public class FakePlayer {
 
         out.flush();
         eventThread.invokeSentPacketEvent(packet);
+        state = packet.changeState(state);
     }
 
     public FakePlayer(String name, String ip, int port) throws Exception {
@@ -64,6 +56,7 @@ public class FakePlayer {
         log.info("Fake Player \"%s\" is joining server %s:%d".formatted(name, ip, port));
 
         connection = new Socket(ip, port);
+        state = PlayerState.HANDSHAKING;
         eventThread.setPlayer(this);
         eventThread.setInputStream(connection.getInputStream());
         eventThread.start();
@@ -99,5 +92,21 @@ public class FakePlayer {
 
     public boolean isAlive() {
         return !connection.isClosed();
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+
+    public void setState(PlayerState state) {
+        this.state = state;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

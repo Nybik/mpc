@@ -1,10 +1,8 @@
 package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.*;
-import com.lexmach.client.minecraft.packet.util.PacketUtil;
-
-import java.io.InputStream;
 
 public class TagsPacket extends Packet {
 
@@ -20,6 +18,11 @@ public class TagsPacket extends Packet {
 //        data = new byte[dataSize];
 //        PacketUtil.readFully(in, data);
 //    }
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
+    }
 
     @Override
     public int getId() {

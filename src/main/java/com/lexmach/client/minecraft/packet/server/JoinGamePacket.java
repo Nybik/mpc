@@ -1,7 +1,7 @@
 package com.lexmach.client.minecraft.packet.server;
 
-import com.google.common.primitives.Ints;
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarIdentifier;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarTag;
@@ -23,6 +23,11 @@ public class JoinGamePacket extends Packet {
     public Boolean enableRespawnScreen;
     public Boolean isDebug;
     public Boolean isFlat;
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
+    }
 
     @Override
     public int getId() {

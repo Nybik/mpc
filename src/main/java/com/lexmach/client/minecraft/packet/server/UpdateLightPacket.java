@@ -1,10 +1,10 @@
 package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 public class UpdateLightPacket extends Packet {
@@ -26,14 +26,14 @@ public class UpdateLightPacket extends Packet {
     public void specialRead(InputStream in, VarInt packageSize) throws Exception {
         chunkX.fromStream(in);
         chunkZ.fromStream(in);
-        PacketUtil.setObjectFromStream(trustEdges, in);
+        trustEdges = PacketUtil.getObjectFromStream(Boolean.class, in);
         skyLightMask.fromStream(in);
         blockLightMask.fromStream(in);
         emptySkyLightMask.fromStream(in);
         emptyBlockLightMask.fromStream(in);
         skyLightArray = new byte[SIZE1][];
         blockLightArray = new byte[SIZE1][];
-        System.out.println("packageSize = " + packageSize);
+//        System.out.println("packageSize = " + packageSize);
 //        System.out.println("emptyBlockLightMask = " + emptyBlockLightMask);
 //        int read = 0;
         for (int i = 0; i < SIZE1; ++i) {
@@ -64,6 +64,11 @@ public class UpdateLightPacket extends Packet {
             }
         }
 //        System.out.println("read = " + read);
+    }
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
     }
 
     @Override

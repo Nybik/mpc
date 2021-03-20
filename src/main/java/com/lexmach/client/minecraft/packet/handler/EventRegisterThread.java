@@ -19,7 +19,6 @@ public class EventRegisterThread extends Thread {
 
     private static Logger log = Logger.getLogger(EventRegisterThread.class.getName());
 
-
     private FakePlayer target;
     private InputStream in;
 
@@ -61,7 +60,8 @@ public class EventRegisterThread extends Thread {
                     Thread.yield();
                     continue;
                 };
-                Packet received = PacketUtil.readPacket(in);
+                Packet received = PacketUtil.readPacket(in, target.getState());
+                target.setState(received.changeState(target.getState()));
                 invokeReceivedPacketEvent(received);
             } catch (Exception ex) {
                 ex.printStackTrace();

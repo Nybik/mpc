@@ -1,9 +1,8 @@
 package com.lexmach.client.minecraft.packet;
 
-import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +23,15 @@ public abstract class Packet {
 
     public Packet() { }
 
+    public abstract PlayerState getState();
+
     public abstract int getId();
 
     public abstract boolean isServerBound();
+
+    public PlayerState changeState(PlayerState current) {
+        return current;
+    }
 
     public byte[] getData() throws Exception {
         List<Object> fields = new ArrayList<>();

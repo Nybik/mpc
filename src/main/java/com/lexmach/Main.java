@@ -9,6 +9,7 @@ import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.PacketEventListener;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
+import com.lexmach.client.minecraft.packet.server.LoginSuccessPacket;
 import com.lexmach.client.minecraft.packet.server.PlayerPositionAndLookPacket;
 
 import java.util.logging.Logger;
@@ -24,6 +25,10 @@ public class Main extends PacketEventListener {
         player = new FakePlayer("faker", "localhost", 25565);
         player.addListener(new Main());
         player.connect();
+//        byte one = 1;
+//        Boolean b = (boolean)one;
+//
+//        System.out.println();
 
 //        player.sendPacket(new PingPacket());
     }
@@ -35,7 +40,7 @@ public class Main extends PacketEventListener {
 
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
-//        log.info("Packet id %d is received from player \"%s\"\nContent: %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived()));
+        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
 //        if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
 //            PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
 //            try {
@@ -44,6 +49,10 @@ public class Main extends PacketEventListener {
 //                e.printStackTrace();
 //            }
 //        }
+        if (event.getReceived() instanceof LoginSuccessPacket) {
+            LoginSuccessPacket p = (LoginSuccessPacket) event.getReceived();
+            System.out.println("p.username = " + p.username);
+        }
     }
 }
 

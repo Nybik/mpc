@@ -2,36 +2,31 @@ package com.lexmach.client.minecraft.packet.util;
 
 import com.google.common.primitives.*;
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.PacketState;
 import com.lexmach.client.minecraft.packet.client.*;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftData;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.exceptions.UnknownPackageException;
 import com.lexmach.client.minecraft.packet.server.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
-import javax.lang.model.element.UnknownElementException;
-import javax.lang.model.type.UnknownTypeException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 public class PacketUtil {
 
-    private static HashMap<Integer, Packet> serverPackets = new HashMap<>();
-    private static HashMap<Integer, Packet> clientPackets = new HashMap<>();
+    private static HashMap<PacketState, Packet> packets = new HashMap<>();
 
     public static void registerPacket(Packet packet) throws Exception {
-        if (packet.isServerBound()) {
-            clientPackets.put(packet.getId(), packet);
-        }
-        else if (!packet.isServerBound()) {
-            if (serverPackets.containsKey(packet.getId())) throw new Exception("Packet id %d is already in use".formatted(packet.getId()));
-            serverPackets.put(packet.getId(), packet);
-        }
+        packets.put(new PacketState(packet), packet);
     }
 
     public static void readFully(InputStream in, byte[] arr) throws IOException {
@@ -50,6 +45,14 @@ public class PacketUtil {
     }
 
     public static byte[] getBytesFromObject(Object obj) {
+        if (obj.getClass().isArray()) {
+            byte[] headerLength = new VarInt(Array.getLength(obj)).toBytes();
+            byte[][] data = new byte[Array.getLength(obj)][];
+            for (int i = 0; i < Array.getLength(obj); ++i) {
+                data[i] = getBytesFromObject(Array.get(obj, i));
+            }
+            return ArrayUtils.addAll(headerLength, Bytes.concat(data));
+        }
         if (obj instanceof MinecraftData) return ((MinecraftData) obj).toBytes();
         if (obj instanceof Boolean) {
             if ((Boolean) obj) return new byte[]{0x01};
@@ -61,76 +64,74 @@ public class PacketUtil {
         if (obj instanceof Long) return Longs.toByteArray((Long) obj);
         throw new NotImplementedException(obj.getClass().toString());
     }
-    public static void setObjectFromStream(Object obj, InputStream in) throws Exception {
-        if (obj.getClass().isArray()) {
-            VarInt length = new VarInt();
-            PacketUtil.setObjectFromStream(length, in);
-            System.out.println("length = " + length);
-            obj = Array.newInstance(obj.getClass().getComponentType(), length.num);
-            System.out.println("Array.getLength(obj) = " + Array.getLength(obj));
+    public static <T> T getObjectFromStream(Class<T> clazz, InputStream in) throws Exception {
+        if (clazz.isArray()) {
+            VarInt length = PacketUtil.getObjectFromStream(VarInt.class, in);
+            T arr = (T) Array.newInstance(clazz.getComponentType(), length.num);
             for (int i = 0; i < length.num; ++i) {
-                if (Array.get(obj, i) == null) {
-                    Array.set(obj, i, emptyObject(obj.getClass().getComponentType()));
-                }
-                PacketUtil.setObjectFromStream(Array.get(obj, i), in);
+                Object element = PacketUtil.getObjectFromStream(clazz.getComponentType(), in);
+                Array.set(arr, i, element);
             }
+            return arr;
         }
-        else if (obj instanceof MinecraftCustom) {
-            for (Field field : obj.getClass().getFields()) {
-                Object newField = emptyObject(field.getType());
-
-                PacketUtil.setObjectFromStream(newField, in);
+        else if (MinecraftCustom.class.isAssignableFrom(clazz)) {
+            T obj = clazz.getDeclaredConstructor().newInstance();
+            for (Field field : clazz.getFields()) {
+                Object newField = PacketUtil.getObjectFromStream(field.getType(), in);
                 field.set(obj, newField);
             }
+            return obj;
         }
-        else if (obj instanceof MinecraftData) {
+        else if (MinecraftData.class.isAssignableFrom(clazz)) {
+            T obj = clazz.getDeclaredConstructor().newInstance();
             ((MinecraftData)obj).fromStream(in);
+            return obj;
         }
-        else if (obj instanceof Boolean) {
+        else if (Boolean.class.isAssignableFrom(clazz) || boolean.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[1];
             PacketUtil.readFully(in, tmp);
-            obj = tmp[0];
-        } else if (obj instanceof Byte) {
+            return (T) Boolean.valueOf(tmp[0] == 0x01);
+        } else if (Byte.class.isAssignableFrom(clazz) || byte.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[1];
             PacketUtil.readFully(in, tmp);
-            obj = tmp[0];
-        } else if (obj instanceof Integer) {
+            return (T) Byte.valueOf(tmp[0]);
+        } else if (Integer.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[Ints.BYTES];
             PacketUtil.readFully(in, tmp);
-            obj = Ints.fromByteArray(tmp);
-        } else if (obj instanceof Long) {
+            return (T) Integer.valueOf(Ints.fromByteArray(tmp));
+        } else if (Long.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[Long.BYTES];
             PacketUtil.readFully(in, tmp);
-            obj = Longs.fromByteArray(tmp);
-        } else if (obj instanceof Float) {
+            return (T) Long.valueOf(Longs.fromByteArray(tmp));
+        } else if (Float.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[Float.BYTES];
             PacketUtil.readFully(in, tmp);
-            obj = Float.intBitsToFloat(Ints.fromByteArray(tmp));
-        } else if (obj instanceof Double) {
+            return (T) Float.valueOf(Float.intBitsToFloat(Ints.fromByteArray(tmp)));
+        } else if (Double.class.isAssignableFrom(clazz)) {
             byte[] tmp = new byte[Double.BYTES];
             PacketUtil.readFully(in, tmp);
-            obj = Double.longBitsToDouble(Longs.fromByteArray(tmp));
+            return (T) Double.valueOf(Double.longBitsToDouble(Longs.fromByteArray(tmp)));
         } else {
-            throw new NotImplementedException(obj.getClass().toString());
+            throw new NotImplementedException(clazz.toString());
         }
     }
 
     //TODO sendPacket
 
-    public static Packet readPacket(InputStream in) throws Exception {
+    public static Packet readPacket(InputStream in, PlayerState state) throws Exception {
         VarInt packetSize = new VarInt();
         VarInt packetId = new VarInt();
-        PacketUtil.setObjectFromStream(packetSize, in);
-        PacketUtil.setObjectFromStream(packetId, in);
+        packetSize = PacketUtil.getObjectFromStream(VarInt.class, in);
+        packetId = PacketUtil.getObjectFromStream(VarInt.class, in);
 
-        Packet received = PacketUtil.getServerPacketById(packetId.num);
+        Packet received = PacketUtil.getPacketByPacketState(new PacketState(state, packetId.num, false));
         if (received == null) {
             byte[] info = new byte[packetSize.num - packetId.toBytes().length];
             int readed = 0;
             while (readed != info.length) {
                 readed += in.read(info, readed, info.length - readed);
             }
-            throw new UnknownPackageException("Package of type %d is unknown".formatted(packetId.num));
+            throw new UnknownPackageException("Package of signature %s is unknown".formatted(new PacketState(state, packetId.num, false)));
         }
         Method read = hasSpecialRead(received);
 
@@ -142,7 +143,7 @@ public class PacketUtil {
         for (Field field : received.getClass().getFields()) {
             Object obj = emptyObject(field.getType());
 
-            PacketUtil.setObjectFromStream(obj, in);
+            obj = PacketUtil.getObjectFromStream(obj.getClass(), in);
             field.set(received, obj);
         }
         return received;
@@ -171,11 +172,8 @@ public class PacketUtil {
     }
 
 
-    public static Packet getClientPacketById(int packetId) {
-        return clientPackets.get(packetId);
-    }
-    public static Packet getServerPacketById(int packetId) {
-        return serverPackets.get(packetId);
+    public static Packet getPacketByPacketState(PacketState state) {
+        return packets.get(state);
     }
 
     static {

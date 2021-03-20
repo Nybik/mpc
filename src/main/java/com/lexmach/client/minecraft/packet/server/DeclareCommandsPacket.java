@@ -1,6 +1,7 @@
 package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
@@ -15,6 +16,11 @@ public class DeclareCommandsPacket extends Packet {
     public void specialRead(InputStream in, VarInt packageSize) throws IOException {
         arr = new byte[packageSize.num - new VarInt(getId()).toBytes().length];
         PacketUtil.readFully(in, arr);
+    }
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
     }
 
     @Override

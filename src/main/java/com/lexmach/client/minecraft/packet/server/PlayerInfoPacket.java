@@ -1,6 +1,7 @@
 package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
@@ -14,6 +15,11 @@ public class PlayerInfoPacket extends Packet {
         int dataSize = packageSize.num - new VarInt(getId()).toBytes().length;
         data = new byte[dataSize];
         PacketUtil.readFully(in, data);
+    }
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
     }
 
     @Override

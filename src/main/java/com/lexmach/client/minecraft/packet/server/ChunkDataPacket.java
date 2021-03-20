@@ -1,7 +1,7 @@
 package com.lexmach.client.minecraft.packet.server;
 
-import com.flowpowered.nbt.Tag;
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarTag;
@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class ChunkDataPacket extends Packet {
     Integer chunkX = 0;
     Integer chunkZ = 0;
-    Boolean fullChunk = false;
+    Boolean fullChunk = true;
     VarInt primaryBit = new VarInt();
     VarTag heightMaps = new VarTag();
     VarInt[] biomes = new VarInt[0];
@@ -21,30 +21,39 @@ public class ChunkDataPacket extends Packet {
 
 
     public void specialRead(InputStream in, VarInt packageSize) throws Exception {
-        PacketUtil.setObjectFromStream(chunkX, in);
-        PacketUtil.setObjectFromStream(chunkZ, in);
-        PacketUtil.setObjectFromStream(fullChunk, in);
-        PacketUtil.setObjectFromStream(primaryBit, in);
-        PacketUtil.setObjectFromStream(heightMaps, in);
-        System.out.println("heightMaps = " + heightMaps);
+        chunkX = PacketUtil.getObjectFromStream(Integer.class, in);
+        chunkZ = PacketUtil.getObjectFromStream(Integer.class, in);
+        fullChunk = PacketUtil.getObjectFromStream(Boolean.class, in);
+        primaryBit.fromStream(in);
+        heightMaps.fromStream(in);
+        System.out.println("packageSize = " + packageSize);
         if (fullChunk) {
-            PacketUtil.setObjectFromStream(biomes, in);
+            biomes = PacketUtil.getObjectFromStream(VarInt[].class, in);
         }
-        VarInt kek = new VarInt();
-        kek.fromStream(in);
-        data = new byte[kek.num];
-        System.out.println(kek.num);
-        PacketUtil.readFully(in, data);
-        System.out.println("data = " + data.length);
-        VarInt length = new VarInt();
-        length.fromStream(in);
-        blockEntities = new VarTag[length.num];
-        for (int i = 0; i < length.num; ++i) {
-            blockEntities[i] = new VarTag();
-            System.out.println(blockEntities[i]);
-            PacketUtil.setObjectFromStream(blockEntities[i], in);
-            System.exit(0);
-        }
+        data = PacketUtil.getObjectFromStream(byte[].class, in);
+        blockEntities = PacketUtil.getObjectFromStream(VarTag[].class, in);
+        System.out.println(PacketUtil.getBytesFromObject(chunkX).length);
+        System.out.println(PacketUtil.getBytesFromObject(chunkZ).length);
+        System.out.println(PacketUtil.getBytesFromObject(fullChunk).length);
+        System.out.println(PacketUtil.getBytesFromObject(primaryBit).length);
+        System.out.println(PacketUtil.getBytesFromObject(heightMaps).length);
+        System.out.println(PacketUtil.getBytesFromObject(data).length);
+        System.out.println(PacketUtil.getBytesFromObject(biomes).length);
+        System.out.println(PacketUtil.getBytesFromObject(blockEntities).length);
+
+//        VarInt length = new VarInt();
+//        length.fromStream(in);
+//        blockEntities = new VarTag[length.num];
+//        System.out.println("length.num = " + length.num);
+//        for (int i = 0; i < length.num; ++i) {
+//            blockEntities[i] = new VarTag();
+//            blockEntities[i].fromStream(in);
+//        }
+    }
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
     }
 
     @Override

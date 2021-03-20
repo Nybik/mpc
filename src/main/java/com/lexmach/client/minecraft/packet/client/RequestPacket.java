@@ -1,8 +1,15 @@
 package com.lexmach.client.minecraft.packet.client;
 
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 
 public class RequestPacket extends Packet {
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.STATUS;
+    }
+
     @Override
     public int getId() {
         return 0x00;

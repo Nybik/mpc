@@ -1,12 +1,8 @@
 package com.lexmach.client.minecraft.packet.server;
 
 import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.datatype.VarIdentifier;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
-import com.lexmach.client.minecraft.packet.util.PacketUtil;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class PlayerPositionAndLookPacket extends Packet {
 
@@ -17,6 +13,11 @@ public class PlayerPositionAndLookPacket extends Packet {
     public Float pitch;
     public Byte flags;
     public VarInt teleportId;
+
+    @Override
+    public PlayerState getState() {
+        return PlayerState.PLAY;
+    }
 
     @Override
     public int getId() {
