@@ -18,7 +18,7 @@ public class PluginMessagePacket extends Packet {
     public void specialRead(InputStream in, VarInt packageSize) throws Exception {
         channel = new VarIdentifier();
         channel.fromStream(in);
-        int dataSize = packageSize.num - new VarInt(getId()).toBytes().length - channel.toBytes().length;
+        int dataSize = packageSize.num - channel.toBytes().length;
         data = new byte[dataSize];
         PacketUtil.readFully(in, data);
     }

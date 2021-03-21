@@ -1,25 +1,32 @@
-package com.lexmach.client.minecraft.packet.handler.events;
+package com.lexmach.client.minecraft.packet.handler;
 
-import com.lexmach.client.minecraft.FakePlayer;
+import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.exceptions.UnknownPackageException;
+import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
+import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
+import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class EventRegisterThread extends Thread {
+public class PacketThreadHandler extends Thread {
 
-    private static Logger log = Logger.getLogger(EventRegisterThread.class.getName());
+    private static Logger log = Logger.getLogger(PacketThreadHandler.class.getName());
 
     private FakePlayer target;
     private InputStream in;
+    private OutputStream out;
 
     private List<PacketEventListener> listeners = new ArrayList<>();
 
-    public EventRegisterThread() {
+    public PacketThreadHandler() {
 
     }
 
@@ -30,10 +37,11 @@ public class EventRegisterThread extends Thread {
         listeners.remove(listener);
     }
 
-    public EventRegisterThread(FakePlayer player, InputStream in) {
+    public PacketThreadHandler(FakePlayer player, InputStream in, OutputStream out) {
         this.target = player;
         this.in = in;
-        this.setName("EventRegisterThread of %s".formatted(player.getName()));
+        this.out = out;
+        this.setName("PacketThreadHandler of %s".formatted(player.getName()));
     }
 
     public void invokeSentPacketEvent(Packet sent) {
@@ -47,20 +55,36 @@ public class EventRegisterThread extends Thread {
         }
     }
 
+    public synchronized void sendPacket(Packet packet) throws Exception {
+        byte[] packetPrepared = target.getCompressionHandler().prepare(packet);
+        System.out.println("packetPrepared = " + Arrays.toString(packetPrepared));
+        System.out.println("packetPrepared = " + Arrays.toString(packet.getData()));
+        System.out.println("packetPrepared = " + Arrays.toString(packet.prepare()));
+
+        out.write(new VarInt(packetPrepared.length).toBytes());
+        out.write(packetPrepared);
+
+        out.flush();
+    }
+
     @Override
     public void run() {
         while (target.isAlive()) {
             try {
                 if (in.available() == 0) {
+                    //TODO rework
                     sleep(50);
                     continue;
                 }
-                Packet received = PacketUtil.readPacket(in, target.getState());
+                System.out.println("DATA");
+                Packet received = PacketUtil.readPacket(target.getCompressionHandler().readPacketData(in), target.getState());
+
                 target.setState(received.changeState(target.getState()));
+
                 invokeReceivedPacketEvent(received);
             } catch (Exception ex) {
                 if (ex instanceof UnknownPackageException) {
-//                    System.out.println("ex.getMessage() = " + ex.getMessage());
+                    System.out.println("ex.getMessage() = " + ex.getMessage());
                     continue;
                 }
                 ex.printStackTrace();
@@ -75,5 +99,9 @@ public class EventRegisterThread extends Thread {
 
     public void setInputStream(InputStream inputStream) {
         this.in = inputStream;
+    }
+
+    public void setOutputStream(OutputStream out) {
+        this.out = out;
     }
 }

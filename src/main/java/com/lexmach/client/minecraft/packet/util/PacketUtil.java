@@ -15,6 +15,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -117,14 +118,7 @@ public class PacketUtil {
         }
     }
 
-    //TODO sendPacket
-
-    public static Packet readPacket(InputStream in, PlayerState state) throws Exception {
-        VarInt packetSize = new VarInt();
-        packetSize.fromStream(in);
-        byte[] data = new byte[packetSize.num];
-        PacketUtil.readFully(in, data);
-
+    public static Packet readPacket(byte[] data, PlayerState state) throws Exception {
         InputStream dataInput = new ByteArrayInputStream(data);
         VarInt packetId = PacketUtil.getObjectFromStream(VarInt.class, dataInput);
 
@@ -136,7 +130,7 @@ public class PacketUtil {
 
         if (read != null) {
 //            System.out.println(received.getClass().getName());
-            read.invoke(received, dataInput, packetSize);
+            read.invoke(received, dataInput, new VarInt(data.length));
             return received;
         }
         for (Field field : received.getClass().getFields()) {

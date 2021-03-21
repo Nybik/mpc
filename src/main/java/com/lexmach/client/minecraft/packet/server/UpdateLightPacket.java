@@ -71,7 +71,7 @@ public class UpdateLightPacket extends Packet {
     public byte[] arr;
 
     public void specialRead(InputStream in, VarInt packageSize) throws IOException {
-        arr = new byte[packageSize.num - new VarInt(getId()).toBytes().length];
+        arr = new byte[packageSize.num];
         PacketUtil.readFully(in, arr);
     }
 

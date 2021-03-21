@@ -1,6 +1,6 @@
 package com.lexmach.client.minecraft.packet.handler.events;
 
-import com.lexmach.client.minecraft.FakePlayer;
+import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.Packet;
 
 public class PacketReceivedEvent {

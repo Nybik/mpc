@@ -1,7 +1,7 @@
 package com.lexmach;
 
 import com.lexmach.client.basic.BasicClientMain;
-import com.lexmach.client.minecraft.FakePlayer;
+import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.client.ClientKeepAlivePacket;
 import com.lexmach.client.minecraft.packet.client.ClientPlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.client.TeleportConfirmPacket;
@@ -24,15 +24,15 @@ public class Main extends PacketEventListener {
     public static Random rnd = new Random();
 
     public static String randString() {
-        String answer = "";
+        StringBuilder answer = new StringBuilder();
         for (int i = 0; i < 5; ++i) {
-            answer += (char)(rnd.nextInt(26) + 'a');
+            answer.append((char) (rnd.nextInt(26) + 'a'));
         }
-        return answer;
+        return answer.toString();
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 200; ++i) {
+        for (int i = 0; i < 1; ++i) {
             FakePlayer player = new FakePlayer("checker" + randString(), "localhost", 25565);
             player.addListener(new Main());
             player.connect();
@@ -57,7 +57,7 @@ public class Main extends PacketEventListener {
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
         FakePlayer player = event.getPlayer();
-//        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
+        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
         if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
             try {
