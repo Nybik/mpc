@@ -2,19 +2,15 @@ package com.lexmach;
 
 import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.FakePlayer;
-import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.client.ClientKeepAlivePacket;
 import com.lexmach.client.minecraft.packet.client.ClientPlayerPositionAndLookPacket;
-import com.lexmach.client.minecraft.packet.client.PingPacket;
 import com.lexmach.client.minecraft.packet.client.TeleportConfirmPacket;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
-import com.lexmach.client.minecraft.packet.handler.PacketEventListener;
+import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
-import com.lexmach.client.minecraft.packet.server.LoginSuccessPacket;
 import com.lexmach.client.minecraft.packet.server.PlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.server.ServerKeepAlivePacket;
-import com.lexmach.client.minecraft.packet.server.SpawnLivingEntityPacket;
 
 import java.util.Random;
 import java.util.logging.Logger;

@@ -7,8 +7,8 @@ import com.lexmach.client.minecraft.packet.client.LoginStartPacket;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
-import com.lexmach.client.minecraft.packet.handler.EventRegisterThread;
-import com.lexmach.client.minecraft.packet.handler.PacketEventListener;
+import com.lexmach.client.minecraft.packet.handler.events.EventRegisterThread;
+import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

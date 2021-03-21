@@ -1,17 +1,11 @@
-package com.lexmach.client.minecraft.packet.handler;
+package com.lexmach.client.minecraft.packet.handler.events;
 
-import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.FakePlayer;
 import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.exceptions.UnknownPackageException;
-import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
-import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
-import com.lexmach.client.minecraft.packet.server.ResponsePacket;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;

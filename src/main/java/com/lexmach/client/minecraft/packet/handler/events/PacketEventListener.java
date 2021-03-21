@@ -1,4 +1,4 @@
-package com.lexmach.client.minecraft.packet.handler;
+package com.lexmach.client.minecraft.packet.handler.events;
 
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
