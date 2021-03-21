@@ -2,7 +2,6 @@ package com.lexmach.client.minecraft.fakeplayer;
 
 import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.packet.handler.CompressionHandler;
-import com.lexmach.client.minecraft.packet.util.PacketUtil;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.client.HandshakePacket;
 import com.lexmach.client.minecraft.packet.client.LoginStartPacket;
@@ -35,39 +34,11 @@ public class FakePlayer {
 
     public void sendPacket(Packet packet) throws Exception {
         if (!packet.isServerBound()) throw new RuntimeException("Sent packet is not server bound");
-        OutputStream out = connection.getOutputStream();
+        packetThreadHandler.sendPacket(packet);
 
-        VarInt id = new VarInt(packet.getId());
-        byte[] data = packet.getData();
-        VarInt length = new VarInt(id.toBytes().length + data.length);
-
-        out.write(length.toBytes());
-        out.write(id.toBytes());
-        out.write(data);
-
-        out.flush();
         packetThreadHandler.invokeSentPacketEvent(packet);
         state = packet.changeState(state);
     }
-//    public void sendPacket(Packet packet) throws Exception {
-//        if (!packet.isServerBound()) throw new RuntimeException("Sent packet is not server bound");
-////        packetThreadHandler.sendPacket(packet);
-////
-////        packetThreadHandler.invokeSentPacketEvent(packet);
-//        var out = connection.getOutputStream();
-//        VarInt id = new VarInt(packet.getId());
-//        byte[] data = packet.getData();
-//        VarInt length = new VarInt(id.toBytes().length + data.length);
-//
-//        out.write(length.toBytes());
-//        out.write(id.toBytes());
-//        out.write(data);
-//
-//        out.flush();
-//
-//        System.out.println(packetThreadHandler.getId());
-//        state = packet.changeState(state);
-//    }
 
     public FakePlayer(String name, String ip, int port) throws Exception {
         this.setName(name);
@@ -93,8 +64,8 @@ public class FakePlayer {
         packetThreadHandler.setName("EventRegisterThread of %s".formatted(this.name));
         packetThreadHandler.start();
 
-        this.sendPacket(new HandshakePacket(new VarInt(754), new VarString(ip), (short) port, new VarInt(1)));
-//        this.sendPacket(new LoginStartPacket(new VarString(this.getName())));
+        this.sendPacket(new HandshakePacket(new VarInt(754), new VarString(ip), (short) port, new VarInt(2)));
+        this.sendPacket(new LoginStartPacket(new VarString(this.getName())));
 
     }
 

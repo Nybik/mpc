@@ -24,11 +24,11 @@ public class Main extends PacketEventListener {
     public static Random rnd = new Random();
 
     public static String randString() {
-        StringBuilder answer = new StringBuilder();
+        String answer = "";
         for (int i = 0; i < 5; ++i) {
-            answer.append((char) (rnd.nextInt(26) + 'a'));
+            answer += (char)(rnd.nextInt(26) + 'a');
         }
-        return answer.toString();
+        return answer;
     }
 
     public static void main(String[] args) throws Exception {
@@ -57,7 +57,7 @@ public class Main extends PacketEventListener {
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
         FakePlayer player = event.getPlayer();
-        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
+//        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
         if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
             try {

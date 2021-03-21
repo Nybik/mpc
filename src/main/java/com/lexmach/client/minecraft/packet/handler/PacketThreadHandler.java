@@ -57,9 +57,9 @@ public class PacketThreadHandler extends Thread {
 
     public synchronized void sendPacket(Packet packet) throws Exception {
         byte[] packetPrepared = target.getCompressionHandler().prepare(packet);
-        System.out.println("packetPrepared = " + Arrays.toString(packetPrepared));
-        System.out.println("packetPrepared = " + Arrays.toString(packet.getData()));
-        System.out.println("packetPrepared = " + Arrays.toString(packet.prepare()));
+//        System.out.println("packetPrepared = " + Arrays.toString(packetPrepared));
+//        System.out.println("packetPrepared = " + Arrays.toString(packet.getData()));
+//        System.out.println("packetPrepared = " + Arrays.toString(packet.prepare()));
 
         out.write(new VarInt(packetPrepared.length).toBytes());
         out.write(packetPrepared);
@@ -76,7 +76,6 @@ public class PacketThreadHandler extends Thread {
                     sleep(50);
                     continue;
                 }
-                System.out.println("DATA");
                 Packet received = PacketUtil.readPacket(target.getCompressionHandler().readPacketData(in), target.getState());
 
                 target.setState(received.changeState(target.getState()));
@@ -84,7 +83,7 @@ public class PacketThreadHandler extends Thread {
                 invokeReceivedPacketEvent(received);
             } catch (Exception ex) {
                 if (ex instanceof UnknownPackageException) {
-                    System.out.println("ex.getMessage() = " + ex.getMessage());
+//                    System.out.println("ex.getMessage() = " + ex.getMessage());
                     continue;
                 }
                 ex.printStackTrace();

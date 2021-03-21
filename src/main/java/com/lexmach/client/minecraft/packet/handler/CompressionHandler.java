@@ -57,8 +57,6 @@ public class CompressionHandler {
             return ArrayUtils.addAll(new VarInt(uncompressedData.length).toBytes(), compressedData);
         }
         else if (threshold > 0) {
-            System.out.println(uncompressedData.length );
-            System.out.println("what");
             return ArrayUtils.addAll(new VarInt(0).toBytes(), uncompressedData);
         }
         else {
