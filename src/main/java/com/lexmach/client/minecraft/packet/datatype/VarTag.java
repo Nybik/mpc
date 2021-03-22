@@ -3,7 +3,6 @@ package com.lexmach.client.minecraft.packet.datatype;
 import de.piegames.nbt.Tag;
 import de.piegames.nbt.stream.NBTInputStream;
 import de.piegames.nbt.stream.NBTOutputStream;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

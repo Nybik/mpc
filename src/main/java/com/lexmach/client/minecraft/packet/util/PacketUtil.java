@@ -1,18 +1,26 @@
 package com.lexmach.client.minecraft.packet.util;
 
-import com.google.common.primitives.*;
+import com.google.common.primitives.Bytes;
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.PacketState;
-import com.lexmach.client.minecraft.packet.client.*;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftData;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.exceptions.UnknownPackageException;
+import com.lexmach.client.minecraft.packet.packets.hanshaking.serverbound.HandshakePacket;
 import com.lexmach.client.minecraft.packet.packets.login.clientbound.EncryptionRequestPacket;
 import com.lexmach.client.minecraft.packet.packets.login.clientbound.LoginSuccessPacket;
 import com.lexmach.client.minecraft.packet.packets.login.clientbound.SetCompressionPacket;
+import com.lexmach.client.minecraft.packet.packets.login.serverbound.LoginStartPacket;
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.*;
+import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientChatMessagePacket;
+import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientSettingsPacket;
 import com.lexmach.client.minecraft.packet.packets.status.clientbound.ResponsePacket;
+import com.lexmach.client.minecraft.packet.packets.status.serverbound.PingPacket;
+import com.lexmach.client.minecraft.packet.packets.status.serverbound.RequestPacket;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
 

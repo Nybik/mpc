@@ -1,13 +1,13 @@
-package com.lexmach.client.minecraft.packet.client;
+package com.lexmach.client.minecraft.packet.packets.hanshaking.serverbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.exceptions.WrongStateException;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
+import com.lexmach.client.minecraft.packet.exceptions.WrongStateException;
+import com.lexmach.client.minecraft.packet.packets.hanshaking.HandshakingStatePacket;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 import org.apache.commons.lang3.NotImplementedException;
 
-public class HandshakePacket extends Packet {
+public class HandshakePacket extends HandshakingStatePacket {
 
     public VarInt protocolVersion;
     public VarString serverAddress;
@@ -35,11 +35,6 @@ public class HandshakePacket extends Packet {
             return PlayerState.LOGIN;
         }
         throw new NotImplementedException();
-    }
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.HANDSHAKING;
     }
 
     @Override

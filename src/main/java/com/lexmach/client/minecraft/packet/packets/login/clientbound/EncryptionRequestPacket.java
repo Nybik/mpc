@@ -1,19 +1,13 @@
 package com.lexmach.client.minecraft.packet.packets.login.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
+import com.lexmach.client.minecraft.packet.packets.login.LoginStatePacket;
 
-public class EncryptionRequestPacket extends Packet {
+public class EncryptionRequestPacket extends LoginStatePacket {
 
     public VarString serverId;
     public byte[] publicKey;
     public byte[] verifyToken;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.LOGIN;
-    }
 
     @Override
     public int getId() {

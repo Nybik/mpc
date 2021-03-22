@@ -1,16 +1,10 @@
 package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class HeldItemChangeEvent extends Packet {
+public class HeldItemChangeEvent extends PlayStatePacket {
 
     public Byte slot;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
-    }
 
     @Override
     public int getId() {

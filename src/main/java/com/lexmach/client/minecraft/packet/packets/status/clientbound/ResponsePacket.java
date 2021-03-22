@@ -1,17 +1,11 @@
 package com.lexmach.client.minecraft.packet.packets.status.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
+import com.lexmach.client.minecraft.packet.packets.status.StatusStatePacket;
 
-public class ResponsePacket extends Packet {
+public class ResponsePacket extends StatusStatePacket {
 
     public VarString jsonResponse;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.STATUS;
-    }
 
     @Override
     public int getId() {

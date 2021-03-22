@@ -1,19 +1,13 @@
-package com.lexmach.client.minecraft.packet.client;
+package com.lexmach.client.minecraft.packet.packets.play.serverbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class TeleportConfirmPacket extends Packet {
+public class TeleportConfirmPacket extends PlayStatePacket {
     public VarInt id;
 
     public TeleportConfirmPacket(VarInt id) {
         this.id = id;
-    }
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
     }
 
     @Override

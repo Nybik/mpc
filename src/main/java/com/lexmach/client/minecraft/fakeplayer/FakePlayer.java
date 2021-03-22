@@ -1,16 +1,16 @@
 package com.lexmach.client.minecraft.fakeplayer;
 
 import com.lexmach.client.basic.BasicClientMain;
-import com.lexmach.client.minecraft.packet.client.ClientChatMessagePacket;
-import com.lexmach.client.minecraft.packet.handler.CompressionHandler;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
-import com.lexmach.client.minecraft.packet.client.HandshakePacket;
-import com.lexmach.client.minecraft.packet.client.LoginStartPacket;
-import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.Packet;
+import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
+import com.lexmach.client.minecraft.packet.handler.CompressionHandler;
 import com.lexmach.client.minecraft.packet.handler.PacketThreadHandler;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
+import com.lexmach.client.minecraft.packet.packets.hanshaking.serverbound.HandshakePacket;
+import com.lexmach.client.minecraft.packet.packets.login.serverbound.LoginStartPacket;
+import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientChatMessagePacket;
+import com.lexmach.client.minecraft.packet.util.PlayerState;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

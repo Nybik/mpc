@@ -2,7 +2,8 @@ package com.lexmach.client.minecraft.packet.datatype;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 

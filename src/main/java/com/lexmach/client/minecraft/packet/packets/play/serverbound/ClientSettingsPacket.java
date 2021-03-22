@@ -1,11 +1,10 @@
-package com.lexmach.client.minecraft.packet.client;
+package com.lexmach.client.minecraft.packet.packets.play.serverbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class ClientSettingsPacket extends Packet {
+public class ClientSettingsPacket extends PlayStatePacket {
 
     public VarString locale;
     public byte viewDistance;
@@ -13,11 +12,6 @@ public class ClientSettingsPacket extends Packet {
     public boolean chatColors;
     public byte displayedSkins;
     public VarInt mainHand;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
-    }
 
     @Override
     public int getId() {

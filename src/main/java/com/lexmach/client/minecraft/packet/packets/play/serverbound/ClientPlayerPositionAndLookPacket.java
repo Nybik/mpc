@@ -1,9 +1,8 @@
-package com.lexmach.client.minecraft.packet.client;
+package com.lexmach.client.minecraft.packet.packets.play.serverbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class ClientPlayerPositionAndLookPacket extends Packet {
+public class ClientPlayerPositionAndLookPacket extends PlayStatePacket {
     public Double x;
     public Double y;
     public Double z;
@@ -18,12 +17,6 @@ public class ClientPlayerPositionAndLookPacket extends Packet {
         this.yaw = yaw;
         this.pitch = pitch;
         this.onGround = onGround;
-    }
-
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
     }
 
     @Override

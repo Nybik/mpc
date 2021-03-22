@@ -1,14 +1,12 @@
 package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-public class UpdateLightPacket extends Packet {
+public class UpdateLightPacket extends PlayStatePacket {
     public static final int SIZE1 = 18;
     public static final int SIZE2 = 2048;
 
@@ -53,12 +51,6 @@ public class UpdateLightPacket extends Packet {
                 PacketUtil.readFully(in, blockLightArray[i]);
             }
         }
-    }
-
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
     }
 
     @Override

@@ -1,18 +1,12 @@
 package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class UpdateViewPositionPacket extends Packet {
+public class UpdateViewPositionPacket extends PlayStatePacket {
 
     public VarInt chunkX;
     public VarInt chunkZ;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
-    }
 
     @Override
     public int getId() {

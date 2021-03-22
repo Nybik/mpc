@@ -1,10 +1,9 @@
-package com.lexmach.client.minecraft.packet.client;
+package com.lexmach.client.minecraft.packet.packets.play.serverbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class ClientChatMessagePacket extends Packet {
+public class ClientChatMessagePacket extends PlayStatePacket {
     public VarString chat;
 
     public ClientChatMessagePacket() {}
@@ -13,10 +12,6 @@ public class ClientChatMessagePacket extends Packet {
         chat = new VarString(msg);
     }
 
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
-    }
 
     @Override
     public int getId() {

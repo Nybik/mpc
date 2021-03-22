@@ -3,9 +3,9 @@ package com.lexmach.client.minecraft.packet.datatype;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class VarString implements MinecraftData {
     public String s;

@@ -1,13 +1,12 @@
 package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarAngle;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarUUID;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
 
-public class SpawnLivingEntityPacket extends Packet {
+public class SpawnLivingEntityPacket extends PlayStatePacket {
     public VarInt entityId;
     public VarUUID entityUUID;
     public VarInt type;
@@ -20,11 +19,6 @@ public class SpawnLivingEntityPacket extends Packet {
     public Short velocityX;
     public Short velocityY;
     public Short velocityZ;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
-    }
 
     @Override
     public int getId() {

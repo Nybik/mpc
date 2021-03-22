@@ -1,17 +1,11 @@
 package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
-public class EntityStatusPacket extends Packet {
+public class EntityStatusPacket extends PlayStatePacket {
 
     public Integer entityId;
     public Byte entityStatus;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.PLAY;
-    }
 
     @Override
     public int getId() {

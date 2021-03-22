@@ -1,17 +1,11 @@
 package com.lexmach.client.minecraft.packet.packets.login.clientbound;
 
-import com.lexmach.client.minecraft.packet.Packet;
-import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
+import com.lexmach.client.minecraft.packet.packets.login.LoginStatePacket;
 
-public class SetCompressionPacket extends Packet {
+public class SetCompressionPacket extends LoginStatePacket {
 
     public VarInt threshold;
-
-    @Override
-    public PlayerState getState() {
-        return PlayerState.LOGIN;
-    }
 
     @Override
     public int getId() {

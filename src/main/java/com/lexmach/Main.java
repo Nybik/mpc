@@ -2,9 +2,6 @@ package com.lexmach;
 
 import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
-import com.lexmach.client.minecraft.packet.client.ClientKeepAlivePacket;
-import com.lexmach.client.minecraft.packet.client.ClientPlayerPositionAndLookPacket;
-import com.lexmach.client.minecraft.packet.client.TeleportConfirmPacket;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
@@ -13,6 +10,9 @@ import com.lexmach.client.minecraft.packet.packets.play.clientbound.JoinGamePack
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.PlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerChatMessagePacket;
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerKeepAlivePacket;
+import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientKeepAlivePacket;
+import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientPlayerPositionAndLookPacket;
+import com.lexmach.client.minecraft.packet.packets.play.serverbound.TeleportConfirmPacket;
 
 import java.util.Random;
 import java.util.logging.Logger;
