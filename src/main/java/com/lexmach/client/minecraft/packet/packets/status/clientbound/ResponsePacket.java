@@ -1,22 +1,21 @@
-package com.lexmach.client.minecraft.packet.server;
+package com.lexmach.client.minecraft.packet.packets.status.clientbound;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.datatype.VarString;
 
-public class PlayerAbilitiesPacket extends Packet {
+public class ResponsePacket extends Packet {
 
-    public Byte flags;
-    public Float flyingSpeed;
-    public Float FOVmodifier;
+    public VarString jsonResponse;
 
     @Override
     public PlayerState getState() {
-        return PlayerState.PLAY;
+        return PlayerState.STATUS;
     }
 
     @Override
     public int getId() {
-        return 0x30;
+        return 0x00;
     }
 
     @Override

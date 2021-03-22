@@ -1,20 +1,21 @@
-package com.lexmach.client.minecraft.packet.server;
+package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
+import java.io.IOException;
 import java.io.InputStream;
 
-public class PlayerInfoPacket extends Packet {
+//TODO
+public class DeclareRecipesPacket extends Packet {
 
-    public byte[] data;
+    public byte[] arr;
 
-    public void specialRead(InputStream in, VarInt packageSize) throws Exception {
-        int dataSize = packageSize.num - new VarInt(getId()).toBytes().length;
-        data = new byte[dataSize];
-        PacketUtil.readFully(in, data);
+    public void specialRead(InputStream in, VarInt packageSize) throws IOException {
+        arr = new byte[packageSize.num];
+        PacketUtil.readFully(in, arr);
     }
 
     @Override
@@ -24,7 +25,7 @@ public class PlayerInfoPacket extends Packet {
 
     @Override
     public int getId() {
-        return 0x32;
+        return 0x5A;
     }
 
     @Override

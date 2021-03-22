@@ -4,7 +4,7 @@ import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
-import com.lexmach.client.minecraft.packet.server.SetCompressionPacket;
+import com.lexmach.client.minecraft.packet.packets.login.clientbound.SetCompressionPacket;
 
 public class FakePlayerEventHandler extends PacketEventListener {
     private FakePlayer player;

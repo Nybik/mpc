@@ -1,12 +1,11 @@
-package com.lexmach.client.minecraft.packet.server;
+package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
 
-public class EntityStatusPacket extends Packet {
+public class HeldItemChangeEvent extends Packet {
 
-    public Integer entityId;
-    public Byte entityStatus;
+    public Byte slot;
 
     @Override
     public PlayerState getState() {
@@ -15,7 +14,7 @@ public class EntityStatusPacket extends Packet {
 
     @Override
     public int getId() {
-        return 0x1A;
+        return 0x3F;
     }
 
     @Override

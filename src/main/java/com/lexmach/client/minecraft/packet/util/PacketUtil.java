@@ -8,20 +8,21 @@ import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftData;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.exceptions.UnknownPackageException;
-import com.lexmach.client.minecraft.packet.server.*;
+import com.lexmach.client.minecraft.packet.packets.login.clientbound.EncryptionRequestPacket;
+import com.lexmach.client.minecraft.packet.packets.login.clientbound.LoginSuccessPacket;
+import com.lexmach.client.minecraft.packet.packets.login.clientbound.SetCompressionPacket;
+import com.lexmach.client.minecraft.packet.packets.play.clientbound.*;
+import com.lexmach.client.minecraft.packet.packets.status.clientbound.ResponsePacket;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 public class PacketUtil {
 

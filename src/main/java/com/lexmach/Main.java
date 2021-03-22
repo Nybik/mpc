@@ -9,10 +9,10 @@ import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
-import com.lexmach.client.minecraft.packet.server.JoinGamePacket;
-import com.lexmach.client.minecraft.packet.server.PlayerPositionAndLookPacket;
-import com.lexmach.client.minecraft.packet.server.ServerChatMessagePacket;
-import com.lexmach.client.minecraft.packet.server.ServerKeepAlivePacket;
+import com.lexmach.client.minecraft.packet.packets.play.clientbound.JoinGamePacket;
+import com.lexmach.client.minecraft.packet.packets.play.clientbound.PlayerPositionAndLookPacket;
+import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerChatMessagePacket;
+import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerKeepAlivePacket;
 
 import java.util.Random;
 import java.util.logging.Logger;
@@ -34,7 +34,7 @@ public class Main extends PacketEventListener {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 1; ++i) {
+        for (int i = 0; i < 5; ++i) {
             FakePlayer player = new FakePlayer(randString(), "localhost", 25565);
             player.addListener(new Main());
             player.connect();

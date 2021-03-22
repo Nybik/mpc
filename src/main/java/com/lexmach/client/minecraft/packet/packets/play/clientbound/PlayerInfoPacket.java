@@ -1,24 +1,18 @@
-package com.lexmach.client.minecraft.packet.server;
+package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
-import com.lexmach.client.minecraft.packet.datatype.VarIdentifier;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.util.PacketUtil;
 
 import java.io.InputStream;
 
-public class PluginMessagePacket extends Packet {
+public class PlayerInfoPacket extends Packet {
 
-    public VarIdentifier channel;
-
-    //TODO
     public byte[] data;
 
     public void specialRead(InputStream in, VarInt packageSize) throws Exception {
-        channel = new VarIdentifier();
-        channel.fromStream(in);
-        int dataSize = packageSize.num - channel.toBytes().length;
+        int dataSize = packageSize.num - new VarInt(getId()).toBytes().length;
         data = new byte[dataSize];
         PacketUtil.readFully(in, data);
     }
@@ -30,7 +24,7 @@ public class PluginMessagePacket extends Packet {
 
     @Override
     public int getId() {
-        return 0x17;
+        return 0x32;
     }
 
     @Override

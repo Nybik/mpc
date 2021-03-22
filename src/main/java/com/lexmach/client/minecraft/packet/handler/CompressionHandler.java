@@ -6,10 +6,7 @@ import com.lexmach.client.minecraft.packet.util.PacketUtil;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterOutputStream;
@@ -60,7 +57,6 @@ public class CompressionHandler {
             return ArrayUtils.addAll(new VarInt(0).toBytes(), uncompressedData);
         }
         else {
-            System.out.println("???");
             return uncompressedData;
         }
     }

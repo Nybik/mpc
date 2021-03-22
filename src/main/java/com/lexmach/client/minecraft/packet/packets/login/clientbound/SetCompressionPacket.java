@@ -1,14 +1,12 @@
-package com.lexmach.client.minecraft.packet.server;
+package com.lexmach.client.minecraft.packet.packets.login.clientbound;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
-import com.lexmach.client.minecraft.packet.datatype.VarString;
+import com.lexmach.client.minecraft.packet.datatype.VarInt;
 
-public class EncryptionRequestPacket extends Packet {
+public class SetCompressionPacket extends Packet {
 
-    public VarString serverId;
-    public byte[] publicKey;
-    public byte[] verifyToken;
+    public VarInt threshold;
 
     @Override
     public PlayerState getState() {
@@ -17,7 +15,7 @@ public class EncryptionRequestPacket extends Packet {
 
     @Override
     public int getId() {
-        return 0x01;
+        return 0x03;
     }
 
     @Override

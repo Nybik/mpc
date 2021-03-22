@@ -1,11 +1,13 @@
-package com.lexmach.client.minecraft.packet.server;
+package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
+import com.lexmach.client.minecraft.packet.datatype.VarInt;
 
-public class HeldItemChangeEvent extends Packet {
+public class UpdateViewPositionPacket extends Packet {
 
-    public Byte slot;
+    public VarInt chunkX;
+    public VarInt chunkZ;
 
     @Override
     public PlayerState getState() {
@@ -14,7 +16,7 @@ public class HeldItemChangeEvent extends Packet {
 
     @Override
     public int getId() {
-        return 0x3F;
+        return 0x40;
     }
 
     @Override
