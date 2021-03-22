@@ -9,7 +9,9 @@ import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 import com.lexmach.client.minecraft.packet.handler.events.PacketReceivedEvent;
 import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
+import com.lexmach.client.minecraft.packet.server.JoinGamePacket;
 import com.lexmach.client.minecraft.packet.server.PlayerPositionAndLookPacket;
+import com.lexmach.client.minecraft.packet.server.ServerChatMessagePacket;
 import com.lexmach.client.minecraft.packet.server.ServerKeepAlivePacket;
 
 import java.util.Random;
@@ -33,9 +35,10 @@ public class Main extends PacketEventListener {
 
     public static void main(String[] args) throws Exception {
         for (int i = 0; i < 1; ++i) {
-            FakePlayer player = new FakePlayer("checker" + randString(), "localhost", 25565);
+            FakePlayer player = new FakePlayer(randString(), "localhost", 25565);
             player.addListener(new Main());
             player.connect();
+//            Thread.sleep(4000);
         }
 //        byte one = 1;
 //        Boolean b = (boolean)one;
@@ -58,6 +61,12 @@ public class Main extends PacketEventListener {
     public void onPacketReceived(PacketReceivedEvent event) {
         FakePlayer player = event.getPlayer();
 //        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
+        if (event.getReceived() instanceof JoinGamePacket) {
+            try {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if (event.getReceived() instanceof PlayerPositionAndLookPacket) {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
             try {
@@ -78,11 +87,15 @@ public class Main extends PacketEventListener {
             ServerKeepAlivePacket p = (ServerKeepAlivePacket) event.getReceived();
             try {
                 player.sendPacket(new ClientKeepAlivePacket(p.keepAliveId));
-//                player.sendPacket(new ClientPlayerPositionAndLookPacket(x + 1, y, z, yaw, pitch, false));
-//                x++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        if (event.getReceived() instanceof ServerChatMessagePacket) {
+            ServerChatMessagePacket chat = (ServerChatMessagePacket) event.getReceived();
+//            if (chat.position <= 2) {
+//                log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().toString()));
+//            }
         }
 //        if (event.getReceived() instanceof LoginSuccessPacket) {
 //            LoginSuccessPacket p = (LoginSuccessPacket) event.getReceived();

@@ -172,6 +172,7 @@ public class PacketUtil {
     static {
         try {
             //Client packets
+            registerPacket(new ClientChatMessagePacket());
             registerPacket(new ClientSettingsPacket());
             registerPacket(new HandshakePacket());
             registerPacket(new LoginStartPacket());
@@ -193,6 +194,7 @@ public class PacketUtil {
             registerPacket(new PlayerAbilitiesPacket());
             registerPacket(new PluginMessagePacket());
             registerPacket(new ResponsePacket());
+            registerPacket(new ServerChatMessagePacket());
             registerPacket(new ServerDifficultyPacket());
             registerPacket(new ServerKeepAlivePacket());
             registerPacket(new SetCompressionPacket());

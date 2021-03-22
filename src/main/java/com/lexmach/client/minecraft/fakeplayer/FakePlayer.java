@@ -1,6 +1,7 @@
 package com.lexmach.client.minecraft.fakeplayer;
 
 import com.lexmach.client.basic.BasicClientMain;
+import com.lexmach.client.minecraft.packet.client.ClientChatMessagePacket;
 import com.lexmach.client.minecraft.packet.handler.CompressionHandler;
 import com.lexmach.client.minecraft.packet.util.PlayerState;
 import com.lexmach.client.minecraft.packet.client.HandshakePacket;
@@ -13,7 +14,6 @@ import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Logger;
 
@@ -32,7 +32,7 @@ public class FakePlayer {
     private final CompressionHandler compressionHandler = new CompressionHandler();
     private final FakePlayerEventHandler playerEventHandler = new FakePlayerEventHandler();
 
-    public void sendPacket(Packet packet) throws Exception {
+    public synchronized void sendPacket(Packet packet) throws Exception {
         if (!packet.isServerBound()) throw new RuntimeException("Sent packet is not server bound");
         packetThreadHandler.sendPacket(packet);
 
@@ -116,5 +116,9 @@ public class FakePlayer {
 
     public CompressionHandler getCompressionHandler() {
         return compressionHandler;
+    }
+
+    public void sendMessage(String s) throws Exception {
+        this.sendPacket(new ClientChatMessagePacket(s));
     }
 }
