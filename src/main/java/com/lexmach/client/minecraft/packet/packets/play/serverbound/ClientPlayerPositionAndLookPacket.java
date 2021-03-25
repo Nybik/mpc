@@ -1,6 +1,7 @@
 package com.lexmach.client.minecraft.packet.packets.play.serverbound;
 
 import com.lexmach.client.minecraft.datatype.Location;
+import com.lexmach.client.minecraft.datatype.Look;
 import com.lexmach.client.minecraft.packet.packets.play.PlayStatePacket;
 
 public class ClientPlayerPositionAndLookPacket extends PlayStatePacket {
@@ -22,6 +23,10 @@ public class ClientPlayerPositionAndLookPacket extends PlayStatePacket {
 
     public ClientPlayerPositionAndLookPacket(Location location, float yaw, float pitch, boolean onGround) {
         this(location.getX(), location.getY(), location.getZ(), yaw, pitch, onGround);
+    }
+
+    public ClientPlayerPositionAndLookPacket(Location location, Look look, boolean onGround) {
+        this(location, look.getYaw(), look.getPitch(), onGround);
     }
 
     @Override

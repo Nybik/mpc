@@ -17,8 +17,24 @@ public class Location {
         Z = z;
     }
 
+    public Location mult(double k) {
+        return new Location(X * k, Y * k, Z * k);
+    }
+
     public Location add(Location other) {
         return new Location(X + other.getX(), Y + other.getY(), Z + other.getZ());
+    }
+
+    public Location sub(Location other) {
+        return this.add(other.mult(-1));
+    }
+
+    public double len() {
+        return Math.sqrt(X * X + Y * Y + Z * Z);
+    }
+
+    public Location normalize() {
+        return this.mult(1. / len());
     }
 
     public double getX() {

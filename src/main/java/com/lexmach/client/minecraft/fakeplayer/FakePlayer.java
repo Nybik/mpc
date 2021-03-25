@@ -2,7 +2,7 @@ package com.lexmach.client.minecraft.fakeplayer;
 
 import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.fakeplayer.handler.FakePlayerEventHandler;
-import com.lexmach.client.minecraft.fakeplayer.handler.LocationHandler;
+import com.lexmach.client.minecraft.fakeplayer.handler.FakePlayerPositionHandler;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
@@ -33,7 +33,7 @@ public class FakePlayer {
     private final PacketThreadHandler packetThreadHandler = new PacketThreadHandler();
     private final CompressionHandler compressionHandler = new CompressionHandler();
     private final FakePlayerEventHandler playerEventHandler = new FakePlayerEventHandler();
-    private final LocationHandler locationHandler = new LocationHandler();
+    private final FakePlayerPositionHandler locationHandler = new FakePlayerPositionHandler();
 
     public synchronized void sendPacket(Packet packet) throws Exception {
         if (!packet.isServerBound()) throw new RuntimeException("Sent packet is not server bound");
@@ -125,7 +125,7 @@ public class FakePlayer {
         this.sendPacket(new ClientChatMessagePacket(s));
     }
 
-    public synchronized LocationHandler getLocationHandler() {
+    public synchronized FakePlayerPositionHandler getPositionHandler() {
         return locationHandler;
     }
 }

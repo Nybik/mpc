@@ -2,6 +2,7 @@ package com.lexmach;
 
 import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.datatype.Location;
+import com.lexmach.client.minecraft.datatype.Look;
 import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
@@ -65,12 +66,13 @@ public class Main extends PacketEventListener {
         if (event.getReceived() instanceof JoinGamePacket) {
             try {
                 new RepeatableTickThread(() ->{
-                    Location loc = player.getLocationHandler().getLocation();
+                    Location loc = player.getPositionHandler().getLocation();
                     if (loc == null) return;
                     loc = loc.add(new Location(0.2185, 0, 0));
-                    player.getLocationHandler().setLocation(loc);
+                    player.getPositionHandler().setLook(new Look(player.getPositionHandler().getLocation(), loc));
+                    player.getPositionHandler().setLocation(loc);
                     try {
-                        player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, 0, 0, true));
+                        player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, player.getPositionHandler().getLook(), true));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -1,6 +1,7 @@
 package com.lexmach.client.minecraft.fakeplayer.handler;
 
 import com.lexmach.client.minecraft.datatype.Location;
+import com.lexmach.client.minecraft.datatype.Look;
 import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
@@ -29,7 +30,9 @@ public class FakePlayerEventHandler extends PacketEventListener {
         }
         if (packet instanceof PlayerPositionAndLookPacket) {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket)packet;
-            player.getLocationHandler().setLocation(new Location(p.X, p.Y, p.Z));
+            player.getPositionHandler().setLocation(new Location(p.X, p.Y, p.Z));
+            player.getPositionHandler().setLook(new Look(p.yaw, p.pitch));
+
         }
         if (packet instanceof ServerKeepAlivePacket) {
             ServerKeepAlivePacket p = (ServerKeepAlivePacket)packet;

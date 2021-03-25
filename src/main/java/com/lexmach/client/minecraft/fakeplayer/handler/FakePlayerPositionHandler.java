@@ -1,10 +1,16 @@
 package com.lexmach.client.minecraft.fakeplayer.handler;
 
 import com.lexmach.client.minecraft.datatype.Location;
+import com.lexmach.client.minecraft.datatype.Look;
 
-public class LocationHandler {
+public class FakePlayerPositionHandler {
 
     private Location location = null;
+    private Look look = null;
+
+    public synchronized Look getLook() {
+        return look;
+    }
 
     public synchronized Location getLocation() {
         return location;
@@ -12,5 +18,9 @@ public class LocationHandler {
 
     public synchronized void setLocation(Location location) {
         this.location = location;
+    }
+
+    public synchronized void setLook(Look look) {
+        this.look = look;
     }
 }
