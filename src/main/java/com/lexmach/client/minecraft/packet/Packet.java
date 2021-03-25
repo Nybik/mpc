@@ -6,7 +6,6 @@ import com.lexmach.client.minecraft.packet.util.PlayerState;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,9 +19,6 @@ public abstract class Packet {
 
     //TODO make Packet implement MinecraftCustom and check if it works
 
-    private static HashMap<Integer, Packet> serverPackets = new HashMap<>();
-    private static HashMap<Integer, Packet> clientPackets = new HashMap<>();
-
     public Packet() { }
 
     public abstract PlayerState getState();
@@ -35,11 +31,11 @@ public abstract class Packet {
         return current;
     }
 
-//    /**
-//     * @return byte array corresponding to the
-//     * @see com.lexmach.client.minecraft.packet.datatype.VarInt packetId
-//     * @see byte[] array data of the packet
-//     */
+    /**
+     * @return byte array corresponding to the
+     * {@link VarInt} packetId
+     * @see byte[] array data of the packet
+     */
     public byte[] prepare() throws Exception {
         return ArrayUtils.addAll(new VarInt(getId()).toBytes(), getData());
     }

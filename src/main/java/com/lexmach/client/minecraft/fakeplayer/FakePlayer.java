@@ -1,6 +1,8 @@
 package com.lexmach.client.minecraft.fakeplayer;
 
 import com.lexmach.client.basic.BasicClientMain;
+import com.lexmach.client.minecraft.fakeplayer.handler.FakePlayerEventHandler;
+import com.lexmach.client.minecraft.fakeplayer.handler.LocationHandler;
 import com.lexmach.client.minecraft.packet.Packet;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.datatype.VarString;
@@ -31,6 +33,7 @@ public class FakePlayer {
     private final PacketThreadHandler packetThreadHandler = new PacketThreadHandler();
     private final CompressionHandler compressionHandler = new CompressionHandler();
     private final FakePlayerEventHandler playerEventHandler = new FakePlayerEventHandler();
+    private final LocationHandler locationHandler = new LocationHandler();
 
     public synchronized void sendPacket(Packet packet) throws Exception {
         if (!packet.isServerBound()) throw new RuntimeException("Sent packet is not server bound");
@@ -40,7 +43,7 @@ public class FakePlayer {
         state = packet.changeState(state);
     }
 
-    public FakePlayer(String name, String ip, int port) throws Exception {
+    public FakePlayer(String name, String ip, int port) {
         this.setName(name);
         this.setIp(ip);
         this.setPort(port);
@@ -120,5 +123,9 @@ public class FakePlayer {
 
     public void sendMessage(String s) throws Exception {
         this.sendPacket(new ClientChatMessagePacket(s));
+    }
+
+    public synchronized LocationHandler getLocationHandler() {
+        return locationHandler;
     }
 }

@@ -1,6 +1,7 @@
 package com.lexmach;
 
 import com.lexmach.client.basic.BasicClientMain;
+import com.lexmach.client.minecraft.datatype.Location;
 import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
@@ -13,6 +14,7 @@ import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerKeepAl
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientKeepAlivePacket;
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientPlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.TeleportConfirmPacket;
+import com.lexmach.client.util.RepeatableTickThread;
 
 import java.util.Random;
 import java.util.logging.Logger;
@@ -34,8 +36,8 @@ public class Main extends PacketEventListener {
     }
 
     public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 5; ++i) {
-            FakePlayer player = new FakePlayer(randString(), "localhost", 25565);
+        for (int i = 0; i < 1; ++i) {
+            FakePlayer player = new FakePlayer("check1234", "localhost", 25565);
             player.addListener(new Main());
             player.connect();
 //            Thread.sleep(4000);
@@ -60,9 +62,19 @@ public class Main extends PacketEventListener {
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
         FakePlayer player = event.getPlayer();
-//        log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().getClass().getName()));
         if (event.getReceived() instanceof JoinGamePacket) {
             try {
+                new RepeatableTickThread(() ->{
+                    Location loc = player.getLocationHandler().getLocation();
+                    if (loc == null) return;
+                    loc = loc.add(new Location(0.2185, 0, 0));
+                    player.getLocationHandler().setLocation(loc);
+                    try {
+                        player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, 0, 0, true));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }, 1, 200);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -71,31 +83,15 @@ public class Main extends PacketEventListener {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket) event.getReceived();
             try {
                 player.sendPacket(new TeleportConfirmPacket(p.teleportId));
-                System.out.println("new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true).getData().length = " + new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, true).getData().length);
                 player.sendPacket(new ClientPlayerPositionAndLookPacket(p.X, p.Y, p.Z, p.yaw, p.pitch, false));
-                x = p.X;
-                y = p.Y;
-                z = p.Z;
-                yaw = p.yaw;
-                pitch = p.pitch;
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (event.getReceived() instanceof ServerKeepAlivePacket) {
-            ServerKeepAlivePacket p = (ServerKeepAlivePacket) event.getReceived();
-            try {
-                player.sendPacket(new ClientKeepAlivePacket(p.keepAliveId));
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (event.getReceived() instanceof ServerChatMessagePacket) {
             ServerChatMessagePacket chat = (ServerChatMessagePacket) event.getReceived();
-//            if (chat.position <= 2) {
-//                log.info("Packet id %d is received from player \"%s\"\nContent %s".formatted(event.getReceived().getId(), event.getPlayer().getName(), event.getReceived().toString()));
-//            }
         }
 //        if (event.getReceived() instanceof LoginSuccessPacket) {
 //            LoginSuccessPacket p = (LoginSuccessPacket) event.getReceived();
