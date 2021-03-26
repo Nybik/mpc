@@ -1,4 +1,4 @@
-package com.lexmach.client.minecraft.datatype;
+package com.lexmach.client.minecraft.data.datatype;
 
 public class Location {
     private double X;
@@ -59,5 +59,14 @@ public class Location {
 
     public void setZ(double z) {
         Z = z;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "X=" + X +
+                ", Y=" + Y +
+                ", Z=" + Z +
+                '}';
     }
 }

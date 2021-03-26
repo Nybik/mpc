@@ -1,4 +1,4 @@
-package com.lexmach.client.minecraft.datatype;
+package com.lexmach.client.minecraft.data.datatype;
 
 public class Look {
     private float yaw;
@@ -26,6 +26,7 @@ public class Look {
     }
 
     public void setYaw(float yaw) {
+        if (yaw >= 360) yaw -= 360;
         this.yaw = yaw;
     }
 
@@ -34,6 +35,15 @@ public class Look {
     }
 
     public void setPitch(float pitch) {
+        if (pitch >= 360) pitch -= 360;
         this.pitch = pitch;
+    }
+
+    @Override
+    public String toString() {
+        return "Look{" +
+                "yaw=" + yaw +
+                ", pitch=" + pitch +
+                '}';
     }
 }

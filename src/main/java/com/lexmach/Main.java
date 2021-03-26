@@ -1,8 +1,8 @@
 package com.lexmach;
 
 import com.lexmach.client.basic.BasicClientMain;
-import com.lexmach.client.minecraft.datatype.Location;
-import com.lexmach.client.minecraft.datatype.Look;
+import com.lexmach.client.minecraft.data.datatype.Location;
+import com.lexmach.client.minecraft.data.datatype.Look;
 import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
@@ -11,8 +11,6 @@ import com.lexmach.client.minecraft.packet.handler.events.PacketSentEvent;
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.JoinGamePacket;
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.PlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerChatMessagePacket;
-import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerKeepAlivePacket;
-import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientKeepAlivePacket;
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientPlayerPositionAndLookPacket;
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.TeleportConfirmPacket;
 import com.lexmach.client.util.RepeatableTickThread;
@@ -65,18 +63,32 @@ public class Main extends PacketEventListener {
         FakePlayer player = event.getPlayer();
         if (event.getReceived() instanceof JoinGamePacket) {
             try {
+//                new RepeatableTickThread(() ->{
+//                    Location loc = player.getPositionHandler().getLocation();
+//                    if (loc == null) return;
+//                    loc = loc.add(new Location(0.2185, 0, 0));
+//                    player.getPositionHandler().setLook(new Look(player.getPositionHandler().getLocation(), loc));
+//                    player.getPositionHandler().setLocation(loc);
+//                    try {
+//                        player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, player.getPositionHandler().getLook(), true));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }, 1, 200);
                 new RepeatableTickThread(() ->{
                     Location loc = player.getPositionHandler().getLocation();
                     if (loc == null) return;
-                    loc = loc.add(new Location(0.2185, 0, 0));
-                    player.getPositionHandler().setLook(new Look(player.getPositionHandler().getLocation(), loc));
+                    Look look = player.getPositionHandler().getLook();
+                    System.out.println("KEK " + loc + " " + look);
+                    look.setPitch(0);
+                    look.setYaw(look.getYaw() + 2);
                     player.getPositionHandler().setLocation(loc);
                     try {
                         player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, player.getPositionHandler().getLook(), true));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }, 1, 200);
+                }, 1);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,7 +1,7 @@
 package com.lexmach.client.minecraft.fakeplayer.handler;
 
-import com.lexmach.client.minecraft.datatype.Location;
-import com.lexmach.client.minecraft.datatype.Look;
+import com.lexmach.client.minecraft.data.datatype.Location;
+import com.lexmach.client.minecraft.data.datatype.Look;
 
 public class FakePlayerPositionHandler {
 
