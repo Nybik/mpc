@@ -1,8 +1,13 @@
 package com.lexmach;
 
-import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.data.datatype.Location;
 import com.lexmach.client.minecraft.data.datatype.Look;
+import com.lexmach.client.minecraft.data.datatype.Registry;
+import com.lexmach.client.minecraft.data.datatype.block.palette.GlobalPalette;
+import com.lexmach.client.minecraft.data.datatype.chunk.Chunk;
+import com.lexmach.client.minecraft.data.datatype.chunk.Chunks;
+import com.lexmach.client.minecraft.data.reader.reports.blocks.BlocksReader;
+import com.lexmach.client.minecraft.data.reader.reports.registries.RegistriesReader;
 import com.lexmach.client.minecraft.fakeplayer.FakePlayer;
 import com.lexmach.client.minecraft.packet.datatype.VarInt;
 import com.lexmach.client.minecraft.packet.handler.events.PacketEventListener;
@@ -15,32 +20,43 @@ import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientPlayer
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.TeleportConfirmPacket;
 import com.lexmach.client.util.RepeatableTickThread;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.logging.Logger;
 
 public class Main extends PacketEventListener {
 
-    private static Logger log = Logger.getLogger(BasicClientMain.class.getName());
+    private static Logger log = Logger.getLogger(Main.class.getName());
 
     private static VarInt protocolVersion = new VarInt(754);
 
     public static Random rnd = new Random();
 
     public static String randString() {
-        String answer = "";
+        StringBuilder answer = new StringBuilder();
         for (int i = 0; i < 5; ++i) {
-            answer += (char)(rnd.nextInt(26) + 'a');
+            answer.append((char) (rnd.nextInt(26) + 'a'));
         }
-        return answer;
+        return answer.toString();
     }
 
     public static void main(String[] args) throws Exception {
+        BlocksReader.registerBlockStates(Paths.get("src/main/resources/1.16.5/reports/blocks.json").toFile());
+        RegistriesReader.registerRegistries(Paths.get("src/main/resources/1.16.5/reports/registries.json").toFile());
+//        System.out.println(GlobalPalette.getBlockState(5));
         for (int i = 0; i < 1; ++i) {
             FakePlayer player = new FakePlayer("check1234", "localhost", 25565);
             player.addListener(new Main());
             player.connect();
-//            Thread.sleep(4000);
         }
+        Thread.sleep(2000);
+        Chunks.get(24, 4).getBlocks().forEach((x, y) -> {
+            System.out.println(x + ":" + y);
+        });
+        System.out.println("whatafack");
 //        byte one = 1;
 //        Boolean b = (boolean)one;
 //
@@ -75,20 +91,20 @@ public class Main extends PacketEventListener {
 //                        e.printStackTrace();
 //                    }
 //                }, 1, 200);
-                new RepeatableTickThread(() ->{
-                    Location loc = player.getPositionHandler().getLocation();
-                    if (loc == null) return;
-                    Look look = player.getPositionHandler().getLook();
-                    System.out.println("KEK " + loc + " " + look);
-                    look.setPitch(0);
-                    look.setYaw(look.getYaw() + 2);
-                    player.getPositionHandler().setLocation(loc);
-                    try {
-                        player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, player.getPositionHandler().getLook(), true));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }, 1);
+//                new RepeatableTickThread(() ->{
+//                    Location loc = player.getPositionHandler().getLocation();
+//                    if (loc == null) return;
+//                    Look look = player.getPositionHandler().getLook();
+//                    System.out.println("KEK " + loc + " " + look);
+//                    look.setPitch(0);
+//                    look.setYaw(look.getYaw() + 2);
+//                    player.getPositionHandler().setLocation(loc);
+//                    try {
+//                        player.sendPacket(new ClientPlayerPositionAndLookPacket(loc, player.getPositionHandler().getLook(), true));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }, 1);
             } catch (Exception e) {
                 e.printStackTrace();
             }

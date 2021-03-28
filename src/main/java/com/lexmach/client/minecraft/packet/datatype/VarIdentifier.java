@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class VarIdentifier implements MinecraftData {
-    VarString identifier;
+    public VarString identifier;
 
     @Override
     public byte[] toBytes() {

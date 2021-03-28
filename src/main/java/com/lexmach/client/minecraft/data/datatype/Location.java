@@ -1,28 +1,28 @@
 package com.lexmach.client.minecraft.data.datatype;
 
 public class Location {
-    private double X;
-    private double Y;
-    private double Z;
+    private double x;
+    private double y;
+    private double z;
 
     public Location() {
-        X = 0;
-        Y = 0;
-        Z = 0;
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     public Location(double x, double y, double z) {
-        X = x;
-        Y = y;
-        Z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public Location mult(double k) {
-        return new Location(X * k, Y * k, Z * k);
+        return new Location(x * k, y * k, z * k);
     }
 
     public Location add(Location other) {
-        return new Location(X + other.getX(), Y + other.getY(), Z + other.getZ());
+        return new Location(x + other.getX(), y + other.getY(), z + other.getZ());
     }
 
     public Location sub(Location other) {
@@ -30,7 +30,7 @@ public class Location {
     }
 
     public double len() {
-        return Math.sqrt(X * X + Y * Y + Z * Z);
+        return Math.sqrt(x * x + y * y + z * z);
     }
 
     public Location normalize() {
@@ -38,35 +38,35 @@ public class Location {
     }
 
     public double getX() {
-        return X;
+        return x;
     }
 
     public double getY() {
-        return Y;
+        return y;
     }
 
     public double getZ() {
-        return Z;
+        return z;
     }
 
     public void setX(double x) {
-        X = x;
+        this.x = x;
     }
 
     public void setY(double y) {
-        Y = y;
+        this.y = y;
     }
 
     public void setZ(double z) {
-        Z = z;
+        this.z = z;
     }
 
     @Override
     public String toString() {
         return "Location{" +
-                "X=" + X +
-                ", Y=" + Y +
-                ", Z=" + Z +
+                "X=" + x +
+                ", Y=" + y +
+                ", Z=" + z +
                 '}';
     }
 }

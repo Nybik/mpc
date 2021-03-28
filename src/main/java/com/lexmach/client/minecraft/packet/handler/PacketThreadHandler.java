@@ -17,13 +17,13 @@ import java.util.logging.Logger;
 
 public class PacketThreadHandler extends Thread {
 
-    private static Logger log = Logger.getLogger(PacketThreadHandler.class.getName());
+    private static final Logger log = Logger.getLogger(PacketThreadHandler.class.getName());
 
     private FakePlayer target;
     private InputStream in;
     private OutputStream out;
 
-    private List<PacketEventListener> listeners = new ArrayList<>();
+    private final List<PacketEventListener> listeners = new ArrayList<>();
 
     public PacketThreadHandler() {
 
@@ -56,9 +56,6 @@ public class PacketThreadHandler extends Thread {
 
     public synchronized void sendPacket(Packet packet) throws Exception {
         byte[] packetPrepared = target.getCompressionHandler().prepare(packet);
-//        System.out.println("packetPrepared = " + Arrays.toString(packetPrepared));
-//        System.out.println("packetPrepared = " + Arrays.toString(packet.getData()));
-//        System.out.println("packetPrepared = " + Arrays.toString(packet.prepare()));
 
         out.write(new VarInt(packetPrepared.length).toBytes());
         out.write(packetPrepared);
@@ -82,7 +79,6 @@ public class PacketThreadHandler extends Thread {
                 invokeReceivedPacketEvent(received);
             } catch (Exception ex) {
                 if (ex instanceof UnknownPackageException) {
-//                    System.out.println("ex.getMessage() = " + ex.getMessage());
                     continue;
                 }
                 ex.printStackTrace();

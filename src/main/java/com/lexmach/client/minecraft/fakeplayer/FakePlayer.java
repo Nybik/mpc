@@ -1,6 +1,5 @@
 package com.lexmach.client.minecraft.fakeplayer;
 
-import com.lexmach.client.basic.BasicClientMain;
 import com.lexmach.client.minecraft.fakeplayer.handler.FakePlayerEventHandler;
 import com.lexmach.client.minecraft.fakeplayer.handler.FakePlayerPositionHandler;
 import com.lexmach.client.minecraft.packet.Packet;
@@ -20,7 +19,7 @@ import java.net.Socket;
 import java.util.logging.Logger;
 
 public class FakePlayer {
-    private static final Logger log = Logger.getLogger(BasicClientMain.class.getName());
+    private static final Logger log = Logger.getLogger(FakePlayer.class.getName());
 
     private Socket connection;
     private PlayerState state;
