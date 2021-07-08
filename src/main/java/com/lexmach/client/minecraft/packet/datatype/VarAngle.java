@@ -6,7 +6,6 @@ import java.io.InputStream;
 public class VarAngle implements MinecraftData {
     int angle;
 
-
     @Override
     public byte[] toBytes() {
         return new byte[]{(byte)angle};

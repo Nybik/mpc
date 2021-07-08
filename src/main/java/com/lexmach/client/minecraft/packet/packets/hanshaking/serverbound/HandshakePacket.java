@@ -34,7 +34,7 @@ public class HandshakePacket extends HandshakingStatePacket {
         if (state.num == 2) {
             return PlayerState.LOGIN;
         }
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

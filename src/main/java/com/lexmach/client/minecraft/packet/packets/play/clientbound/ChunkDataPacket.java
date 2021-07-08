@@ -3,6 +3,7 @@ package com.lexmach.client.minecraft.packet.packets.play.clientbound;
 import com.lexmach.client.minecraft.data.datatype.Position;
 import com.lexmach.client.minecraft.data.datatype.block.BlockState;
 import com.lexmach.client.minecraft.data.datatype.chunk.Chunk;
+import com.lexmach.client.minecraft.data.datatype.chunk.ChunkPosition;
 import com.lexmach.client.minecraft.data.datatype.chunk.Chunks;
 import com.lexmach.client.minecraft.packet.datatype.MinecraftCustom;
 import com.lexmach.client.minecraft.packet.datatype.VarChunkSection;
@@ -47,7 +48,7 @@ public class ChunkDataPacket extends PlayStatePacket {
 
         blockEntities = PacketUtil.getObjectFromStream(VarTag[].class, in);
 
-        Chunk chunk = Chunks.get(chunkX, chunkZ);
+        Chunk chunk = Chunks.get(new ChunkPosition(chunkX, chunkZ));
         for (int sectionY = 0; sectionY < Chunks.CHUNK_SECTION_COUNT; ++sectionY) {
             if (sections[sectionY] != null) {
                 int offset = sectionY * Chunks.SECTION_HEIGHT;
