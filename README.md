@@ -6,7 +6,7 @@
     player.connect();
     ```
     
-2. To listen to packets sent to player, class should extend ```PacketEventListener``` class and added to listeners of a fake player
+2. To listen to packets sent to player, class should extend ```PacketEventListener``` and added to listeners of a fake player
 
     Example:
     ```java
@@ -25,10 +25,24 @@
        
        @Override
        public void onPacketReceived(PacketReceivedEvent event) {
-            //code..
+            //code...
        }
    }
    ```
+  3. To use blocks and register, you should load in report from the minecraft server [link](https://wiki.vg/Data_Generators)
+  
+     Example:
+     ```java
+     public class Main {
+         
+         public static void main(String[] args) {
+             BlocksReader.registerBlockStates(Paths.get("path-to-block-reports/blocks.json").toFile());
+             RegistriesReader.registerRegistries(Paths.get("path-to-registries-reports/registries.json").toFile());
+             //code..
+         } 
+     
+     }
+```
 ## Packets and other information
 
 Javadocs are in progress.
