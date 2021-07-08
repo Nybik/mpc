@@ -38,11 +38,11 @@
          public static void main(String[] args) {
              BlocksReader.registerBlockStates(Paths.get("path-to-block-reports/blocks.json").toFile());
              RegistriesReader.registerRegistries(Paths.get("path-to-registries-reports/registries.json").toFile());
-             //code..
+             //code...
          } 
      
      }
-```
+    
 ## Packets and other information
 
 Javadocs are in progress.
