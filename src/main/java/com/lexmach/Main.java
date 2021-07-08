@@ -2,9 +2,11 @@ package com.lexmach;
 
 import com.lexmach.client.minecraft.data.datatype.Location;
 import com.lexmach.client.minecraft.data.datatype.Look;
+import com.lexmach.client.minecraft.data.datatype.Material;
 import com.lexmach.client.minecraft.data.datatype.Registry;
 import com.lexmach.client.minecraft.data.datatype.block.palette.GlobalPalette;
 import com.lexmach.client.minecraft.data.datatype.chunk.Chunk;
+import com.lexmach.client.minecraft.data.datatype.chunk.ChunkPosition;
 import com.lexmach.client.minecraft.data.datatype.chunk.Chunks;
 import com.lexmach.client.minecraft.data.reader.reports.blocks.BlocksReader;
 import com.lexmach.client.minecraft.data.reader.reports.registries.RegistriesReader;
@@ -47,22 +49,18 @@ public class Main extends PacketEventListener {
         BlocksReader.registerBlockStates(Paths.get("src/main/resources/1.16.5/reports/blocks.json").toFile());
         RegistriesReader.registerRegistries(Paths.get("src/main/resources/1.16.5/reports/registries.json").toFile());
 //        System.out.println(GlobalPalette.getBlockState(5));
+        Location location = null;
         for (int i = 0; i < 1; ++i) {
             FakePlayer player = new FakePlayer("check1234", "localhost", 25565);
             player.addListener(new Main());
             player.connect();
+            location = player.getPositionHandler().getLocation();
         }
         Thread.sleep(2000);
-        Chunks.get(24, 4).getBlocks().forEach((x, y) -> {
-            System.out.println(x + ":" + y);
+        Chunks.get(location).getBlocks().forEach((x, y) -> {
+            if (y.getMaterial() == Material.UNKNOWN)
+                System.out.println(x + ":" + y);
         });
-        System.out.println("whatafack");
-//        byte one = 1;
-//        Boolean b = (boolean)one;
-//
-//        System.out.println();
-
-//        player.sendPacket(new PingPacket());
     }
 
     @Override
@@ -72,7 +70,6 @@ public class Main extends PacketEventListener {
 
     public static double x, y, z;
     public static float yaw, pitch;
-
 
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {

@@ -2,7 +2,7 @@ package com.lexmach.client.util;
 
 public class RepeatableTickThread extends Thread {
 
-    public static final int TICKS_MILIS = 50;
+    public static final int TICKS_MILLIS = 50;
 
     private Runnable task;
     private int ticks;
@@ -20,6 +20,7 @@ public class RepeatableTickThread extends Thread {
         this.times = -1;
         start();
     }
+
     public RepeatableTickThread(Runnable runnable, int ticks, int times) {
         this();
         this.task = runnable;
@@ -35,7 +36,7 @@ public class RepeatableTickThread extends Thread {
             try {
                 task.run();
                 cnt++;
-                Thread.sleep(TICKS_MILIS * ticks);
+                Thread.sleep(TICKS_MILLIS * ticks);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 break;

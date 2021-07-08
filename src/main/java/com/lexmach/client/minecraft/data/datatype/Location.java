@@ -1,5 +1,9 @@
 package com.lexmach.client.minecraft.data.datatype;
 
+/**
+ * A class, that defines location on the 3D map
+ * implemented vector-like functions
+ */
 public class Location {
     private double x;
     private double y;

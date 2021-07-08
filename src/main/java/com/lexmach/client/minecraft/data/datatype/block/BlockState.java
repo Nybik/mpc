@@ -1,5 +1,6 @@
 package com.lexmach.client.minecraft.data.datatype.block;
 
+import com.lexmach.client.minecraft.data.datatype.Material;
 import com.lexmach.client.minecraft.data.datatype.NamespacedID;
 import com.lexmach.client.minecraft.data.datatype.block.palette.GlobalPalette;
 
@@ -47,6 +48,10 @@ public class BlockState {
                 ", id=" + id +
                 ", properties=" + properties +
                 '}';
+    }
+
+    public Material getMaterial() {
+        return Material.getMaterialByName(this.name);
     }
 
     @Override

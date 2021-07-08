@@ -14,6 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Read blockStates from generated/reports/blocks.json
+ * generated from minecraft server followed by this command
+ * java -cp minecraft_server.jar net.minecraft.data.Main --registries
+ *
+ * for more info look https://wiki.vg/Data_Generators
+ */
 public class RegistriesReader {
 
     public static List<Registry> registerRegistries(JSONObject reportBlocks) {

@@ -2,6 +2,9 @@ package com.lexmach.client.minecraft.data.datatype;
 
 import java.util.Objects;
 
+/**
+ * Same as Location, but coordinates are integers
+ */
 public class Position {
     private int x;
     private int y;

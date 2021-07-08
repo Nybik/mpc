@@ -48,13 +48,10 @@ public class ChunkDataPacket extends PlayStatePacket {
         blockEntities = PacketUtil.getObjectFromStream(VarTag[].class, in);
 
         Chunk chunk = Chunks.get(chunkX, chunkZ);
-        System.out.println("chunkX = " + chunkX);
-        System.out.println("chunkZ = " + chunkZ);
         for (int sectionY = 0; sectionY < Chunks.CHUNK_SECTION_COUNT; ++sectionY) {
             if (sections[sectionY] != null) {
                 int offset = sectionY * Chunks.SECTION_HEIGHT;
                 sections[sectionY].blocks.forEach((pos, block) -> {
-//                    System.out.println(pos + ":" + block.getNamespaced());
                     chunk.setBlock(pos.add(new Position(0, offset, 0)), block);
                 });
             }

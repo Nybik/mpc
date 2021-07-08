@@ -2,6 +2,11 @@ package com.lexmach.client.minecraft.data.datatype;
 
 import java.util.Objects;
 
+/**
+ * Minecraft defined way to identify objects
+ *
+ * for more info look - minecraft.fandom.com/wiki/Namespaced_ID
+ */
 public class NamespacedID {
     private static final String DEFAULT_NAMESPACE = "minecraft";
 
@@ -19,12 +24,11 @@ public class NamespacedID {
         if (split.length == 2) {
             this.namespace = split[0];
             this.name = split[1];
-        } else {
+        } else { //TODO: check split.length != 1
             this.namespace = DEFAULT_NAMESPACE;
             this.name = split[0];
         }
     }
-
 
     public String getNamespace() {
         return namespace;

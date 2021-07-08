@@ -57,7 +57,6 @@ public class FakePlayer {
         connection.setTcpNoDelay(true);
         state = PlayerState.HANDSHAKING;
 
-        playerEventHandler.setPlayer(this);
         addListener(playerEventHandler);
 
         packetThreadHandler.setPlayer(this);

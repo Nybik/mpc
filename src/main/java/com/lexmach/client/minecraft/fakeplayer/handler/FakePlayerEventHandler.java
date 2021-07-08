@@ -13,8 +13,6 @@ import com.lexmach.client.minecraft.packet.packets.play.clientbound.ServerKeepAl
 import com.lexmach.client.minecraft.packet.packets.play.serverbound.ClientKeepAlivePacket;
 
 public class FakePlayerEventHandler extends PacketEventListener {
-    private FakePlayer player;
-
     @Override
     public void onPacketSent(PacketSentEvent event) {
 
@@ -23,6 +21,8 @@ public class FakePlayerEventHandler extends PacketEventListener {
     @Override
     public void onPacketReceived(PacketReceivedEvent event) {
         Packet packet = event.getReceived();
+        FakePlayer player = event.getPlayer();
+
         if (packet instanceof SetCompressionPacket) {
             SetCompressionPacket p = (SetCompressionPacket)packet;
             player.getCompressionHandler().setThreshold(p.threshold.num);
@@ -30,9 +30,7 @@ public class FakePlayerEventHandler extends PacketEventListener {
         if (packet instanceof PlayerPositionAndLookPacket) {
             PlayerPositionAndLookPacket p = (PlayerPositionAndLookPacket)packet;
             player.getPositionHandler().setLocation(new Location(p.X, p.Y, p.Z));
-            System.out.println("setLook");
             player.getPositionHandler().setLook(new Look(p.yaw, p.pitch));
-
         }
         if (packet instanceof ServerKeepAlivePacket) {
             ServerKeepAlivePacket p = (ServerKeepAlivePacket)packet;
@@ -44,7 +42,4 @@ public class FakePlayerEventHandler extends PacketEventListener {
         }
     }
 
-    public void setPlayer(FakePlayer player) {
-        this.player = player;
-    }
 }

@@ -1,5 +1,11 @@
 package com.lexmach.client.minecraft.data.datatype;
 
+/**
+ * Minecraft object, defining point on a sphere, that entity is looking to
+ * yaw and pitch are float numbers equal to amount of positive degrees (not !radians!)
+ *
+ * for more info look - wiki.vg/Protocol#Player_Rotation
+ */
 public class Look {
     private float yaw;
     private float pitch;
